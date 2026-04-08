@@ -56,15 +56,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .view-browser {
-      display: block;
-      font-size: 11px;
-      color: #2B2FE6;
-      text-decoration: underline;
-      margin-top: 4px;
-      text-align: right;
-    }
-
     /* ── Byline bar ── */
     .byline-bar {
       padding: 12px 28px;
@@ -149,6 +140,19 @@
     .img-developer   { background: linear-gradient(145deg, #002B1C 0%, #0A8A5A 60%, #1DD4A0 100%); }
     .img-talent      { background: linear-gradient(145deg, #1A0030 0%, #6B24C0 60%, #A259F7 100%); }
     .img-market      { background: linear-gradient(145deg, #001030 0%, #1255CC 60%, #4F8AFF 100%); }
+
+    /* Real article image container */
+    .story-img-real {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      margin-bottom: 0;
+    }
+    .story-img-wrap {
+      width: 100%;
+      overflow: hidden;
+      background: #111;
+    }
 
     /* Image overlay pattern (makes it look editorial) */
     .story-image::before {
@@ -261,7 +265,6 @@
       .header { flex-direction: column; text-align: center; }
       .header-delivery { border: none; padding: 8px 0; }
       .header-right { text-align: center; }
-      .view-browser { text-align: center; }
     }
 
     .col-story .story-image {
@@ -504,10 +507,9 @@
       subscriber to myHQ Office Pulse.
     </div>
 
-    <!-- Date + View in Browser -->
+    <!-- Date -->
     <div class="header-right">
       <div class="header-date">{{ date }}</div>
-      <a href="#" class="view-browser">VIEW IN BROWSER</a>
     </div>
 
   </div><!-- /header -->
@@ -541,9 +543,16 @@
     {% if newsletter.spotlight %}
     <div class="lead-story">
 
+      {% if newsletter.spotlight.image_data_uri %}
+      <div class="story-img-wrap" style="height:260px;">
+        <img src="{{ newsletter.spotlight.image_data_uri }}" alt="{{ newsletter.spotlight.headline }}"
+             class="story-img-real" style="height:260px;">
+      </div>
+      {% else %}
       <div class="story-image img-spotlight">
         <span class="story-image-label">THE SPOTLIGHT · {{ region.display_name }}</span>
       </div>
+      {% endif %}
 
       <div class="section-label" style="margin-top:14px;">
         THE SPOTLIGHT
@@ -579,9 +588,16 @@
     <div class="two-col" style="margin-bottom:0;">
       {% for item in newsletter.executive_pulse[:2] %}
       <div class="col-story">
+        {% if item.image_data_uri %}
+        <div class="story-img-wrap" style="height:140px;margin-bottom:12px;">
+          <img src="{{ item.image_data_uri }}" alt="{{ item.headline }}"
+               class="story-img-real" style="height:140px;">
+        </div>
+        {% else %}
         <div class="story-image {% if loop.index == 1 %}img-deal{% else %}img-developer{% endif %}">
           <span class="story-image-label">QUICK READ</span>
         </div>
+        {% endif %}
         <div class="section-label" style="margin-top:10px;">
           QUICK HIT <span class="read-time">· 1 min</span>
         </div>
@@ -625,9 +641,16 @@
     <div class="two-col">
       {% for deal in newsletter.deal_desk[:2] %}
       <div class="col-story">
+        {% if deal.image_data_uri %}
+        <div class="story-img-wrap" style="height:140px;margin-bottom:12px;">
+          <img src="{{ deal.image_data_uri }}" alt="{{ deal.headline }}"
+               class="story-img-real" style="height:140px;">
+        </div>
+        {% else %}
         <div class="story-image img-deal">
           <span class="story-image-label">{{ (deal.deal_type or 'Deal') | upper }}</span>
         </div>
+        {% endif %}
         <div class="section-label" style="margin-top:10px;">
           DEAL DESK
           <span class="read-time">· {{ deal.micro_market }}</span>

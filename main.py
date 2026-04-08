@@ -22,7 +22,10 @@ import argparse
 import base64
 import json
 import os
+import re
 import sys
+import urllib.error
+import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -57,6 +60,76 @@ def get_region(region_id: str, regions: list[dict]) -> dict:
     valid = [r["id"] for r in regions]
     print(f"ERROR: Unknown region '{region_id}'. Valid options: {valid}")
     sys.exit(1)
+
+
+_UA = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+)
+
+
+def _fetch_og_image(url: str) -> str:
+    """
+    Fetch og:image from a news article URL and return a base64 data URI.
+    Returns empty string on any failure (timeout, no tag, bad image, etc.).
+    """
+    if not url or not url.startswith("http"):
+        return ""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": _UA})
+        with urllib.request.urlopen(req, timeout=7) as resp:
+            html = resp.read(80000).decode("utf-8", errors="ignore")
+    except Exception:
+        return ""
+
+    # Match og:image in either attribute order
+    match = re.search(
+        r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']',
+        html, re.IGNORECASE,
+    ) or re.search(
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+        html, re.IGNORECASE,
+    )
+    if not match:
+        return ""
+
+    img_url = match.group(1).strip()
+    if not img_url.startswith("http"):
+        return ""
+
+    try:
+        img_req = urllib.request.Request(img_url, headers={"User-Agent": _UA})
+        with urllib.request.urlopen(img_req, timeout=7) as img_resp:
+            img_bytes = img_resp.read(3 * 1024 * 1024)  # cap at 3 MB
+            ct = img_resp.headers.get("Content-Type", "image/jpeg").split(";")[0].strip()
+        if ct not in ("image/jpeg", "image/png", "image/gif", "image/webp"):
+            ct = "image/jpeg"
+        return f"data:{ct};base64,{base64.b64encode(img_bytes).decode()}"
+    except Exception:
+        return ""
+
+
+def _enrich_with_images(newsletter: dict) -> dict:
+    """
+    Walk every section that has a source_url, fetch the og:image,
+    and attach it as image_data_uri on the item.
+    Sections with no URL or a failed fetch silently get no field (template falls back to gradient).
+    """
+    # Spotlight (single dict)
+    spotlight = newsletter.get("spotlight") or {}
+    if spotlight.get("source_url"):
+        print(f"    [img] spotlight: {spotlight['source_url'][:70]}")
+        spotlight["image_data_uri"] = _fetch_og_image(spotlight["source_url"])
+
+    # List sections
+    for section in ("deal_desk", "developer_watch", "talent_moves", "executive_pulse"):
+        for item in newsletter.get(section) or []:
+            url = item.get("source_url", "")
+            if url:
+                print(f"    [img] {section}: {url[:70]}")
+                item["image_data_uri"] = _fetch_og_image(url)
+
+    return newsletter
 
 
 def _logo_data_uri() -> str:
@@ -124,6 +197,10 @@ def generate_for_region(region: dict, voice: dict, recipient_name: str = "Reader
     if not newsletter:
         print("  ERROR: Writer returned empty content. Aborting.")
         return
+
+    # ── Step 3.5: Fetch article images ────────────────────────────────────
+    print("\n[3.5/4] IMAGES — fetching article thumbnails from source URLs...")
+    newsletter = _enrich_with_images(newsletter)
 
     # ── Step 4: Render & Save ──────────────────────────────────────────────
     print("\n[4/4] RENDERING — building HTML...")
