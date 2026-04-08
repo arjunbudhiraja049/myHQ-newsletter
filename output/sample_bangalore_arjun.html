@@ -56,15 +56,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .view-browser {
-      display: block;
-      font-size: 11px;
-      color: #2B2FE6;
-      text-decoration: underline;
-      margin-top: 4px;
-      text-align: right;
-    }
-
     /* ── Byline bar ── */
     .byline-bar {
       padding: 12px 28px;
@@ -149,6 +140,19 @@
     .img-developer   { background: linear-gradient(145deg, #002B1C 0%, #0A8A5A 60%, #1DD4A0 100%); }
     .img-talent      { background: linear-gradient(145deg, #1A0030 0%, #6B24C0 60%, #A259F7 100%); }
     .img-market      { background: linear-gradient(145deg, #001030 0%, #1255CC 60%, #4F8AFF 100%); }
+
+    /* Real article image container */
+    .story-img-real {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      margin-bottom: 0;
+    }
+    .story-img-wrap {
+      width: 100%;
+      overflow: hidden;
+      background: #111;
+    }
 
     /* Image overlay pattern (makes it look editorial) */
     .story-image::before {
@@ -261,7 +265,6 @@
       .header { flex-direction: column; text-align: center; }
       .header-delivery { border: none; padding: 8px 0; }
       .header-right { text-align: center; }
-      .view-browser { text-align: center; }
     }
 
     .col-story .story-image {
@@ -504,10 +507,9 @@
       subscriber to myHQ Office Pulse.
     </div>
 
-    <!-- Date + View in Browser -->
+    <!-- Date -->
     <div class="header-right">
       <div class="header-date">April 08, 2026</div>
-      <a href="#" class="view-browser">VIEW IN BROWSER</a>
     </div>
 
   </div><!-- /header -->
@@ -532,8 +534,8 @@
     <!-- Top of Mind prose intro -->
     
     <div class="tom-prose">
-      <p><strong>Bangalore's office market posts its strongest Q1 net absorption since 2019 at 4.1 msf, driven by GCC expansions and a return of mid-size flex demand.</strong></p>
-      <p>Tech and BFSI occupiers led the charge this fortnight, with three lease closures above 1 lakh sq ft. The Outer Ring Road micro-market continues to attract large-format leases, while HSR Layout is quietly emerging as the go-to corridor for sub-30,000 sq ft boutique office deals — a trend myHQ is seeing first-hand across its managed workspace portfolio. Developers are responding: new supply this quarter is up 18% QoQ, yet vacancy has compressed to 14.2%, the lowest since mid-2022.</p>
+      <p><strong>Bangalore's Grade-A office market recorded 4.1 msf of net absorption in Q1 2026 — its strongest Q1 since 2019 — as GCC demand and mid-size flex occupiers drove leasing across ORR and South Bangalore.</strong></p>
+      <p>The city's vacancy compressed to 14.2% from 16.1% in Q4 2025, giving landlords their first meaningful pricing power since the 2022-23 supply glut. HSR Layout, Koramangala and Sarjapur Road are registering a marked uptick in sub-30,000 sq ft deals — a segment that myHQ's managed workspace portfolio is directly serving, with HSR centre occupancy hitting 91% in March.</p>
     </div>
     
 
@@ -541,26 +543,28 @@
     
     <div class="lead-story">
 
+      
       <div class="story-image img-spotlight">
         <span class="story-image-label">THE SPOTLIGHT · Bangalore</span>
       </div>
+      
 
       <div class="section-label" style="margin-top:14px;">
         THE SPOTLIGHT
         <span class="read-time">· 4 min read</span>
       </div>
 
-      <h1 class="lead-headline">HSR Layout's Boutique Office Boom: Why Sub-30K Sq Ft Deals Are Driving Bangalore's Next Leasing Cycle</h1>
+      <h1 class="lead-headline">India's GCC Boom Puts Bangalore Back on Top: 54 Global Capability Centre Deals Close in Q1</h1>
 
       <div class="lead-body">
-        <p><em>A new breed of mid-market tenant is bypassing Whitefield for the flexibility and talent density of South Bangalore.</em></p>
-        <p>For the past 18 months, most of Bangalore's leasing headlines have been written in Whitefield and Hebbal — large GCC mandates, 2-5 lakh sq ft blocks, multi-year leases. But a quieter story is playing out in HSR Layout, Koramangala, and Sarjapur Road: a surge in sub-30,000 sq ft deals from Series B-D startups, Indian IT services firms right-sizing after work-from-home sprawl, and new-age BFSI companies that need campus-lite offices near talent pools. Data from JLL and Anarock shows HSR Layout recorded 47 transactions below 20,000 sq ft in Q1 2026 — up 64% year-on-year. Average deal size in the micro-market: 11,400 sq ft. That's a profile that suits managed workspace operators and boutique Grade-A buildings far better than it does the large IT parks. myHQ's own occupancy data across HSR and Koramangala centres corroborates the trend: seat utilisation in dedicated cabin clusters hit 91% in March, the highest since January 2023. Landlords who held out for large tenants in 2023-24 are now reconsidering floor-plate flexibility.</p>
+        <p><em>Technology, BFSI and engineering R&D firms are locking large blocks 18–24 months ahead — a dynamic that's reshaping how landlords price and package space.</em></p>
+        <p>After a brief period in 2023-24 where Hyderabad closed the gap, Bangalore has reasserted itself as India's premier GCC destination with 54 transactions in Q1 2026 versus Hyderabad's 41. The drivers are familiar — deep engineering talent pool, established vendor ecosystems, metro connectivity to Whitefield — but the quantum of pre-commitments is new. Landlords report that GCC mandates of 1 lakh sq ft and above are now arriving with 18-24 month lead times, meaning prime ORR and Hebbal blocks through Q3 2027 are already spoken for in many buildings. Embassy Office Parks, Prestige Group and Bagmane are collectively sitting on a pipeline of roughly 12 msf across Bangalore, most of which is tracking to pre-lease before completion. The consequence: vacancy will keep compressing even as new supply arrives, and rents — currently ₹115-125 psf/month on ORR — are on a trajectory toward ₹130 by year-end.</p>
       </div>
 
       
       <div class="takeaway-box">
         <div class="takeaway-label">Key Takeaway</div>
-        <div class="takeaway-text">HSR Layout is no longer just an overflow market — it's the primary address for Bangalore's mid-market office demand. Brokers and landlords ignoring sub-30K sq ft mandates here are leaving money on the table.</div>
+        <div class="takeaway-text">Bangalore's GCC cycle is not a short-term blip. The combination of talent supply, pre-commitment behaviour and constrained prime supply will keep the city's office market outperforming peers through at least 2027.</div>
       </div>
       
 
@@ -579,25 +583,29 @@
     <div class="two-col" style="margin-bottom:0;">
       
       <div class="col-story">
+        
         <div class="story-image img-deal">
           <span class="story-image-label">QUICK READ</span>
         </div>
+        
         <div class="section-label" style="margin-top:10px;">
           QUICK HIT <span class="read-time">· 1 min</span>
         </div>
-        <div class="story-headline">Bengaluru overtakes Hyderabad in Q1 GCC leasing count for first time since 2021</div>
-        <div class="story-summary">54 GCC transactions closed in Bangalore vs 41 in Hyderabad — talent depth and metro connectivity cited as key differentiators.</div>
+        <div class="story-headline">Embassy Office Parks REIT reports 95% portfolio occupancy — highest since IPO</div>
+        <div class="story-summary">Embassy's Q4 FY26 update showed 95% occupancy across 45 msf, driven by Bangalore assets; distributions per unit hit a record ₹6.40.</div>
       </div>
       
       <div class="col-story">
+        
         <div class="story-image img-developer">
           <span class="story-image-label">QUICK READ</span>
         </div>
+        
         <div class="section-label" style="margin-top:10px;">
           QUICK HIT <span class="read-time">· 1 min</span>
         </div>
-        <div class="story-headline">Outer Ring Road vacancy dips below 10% as Prestige and Embassy hold back new completions</div>
-        <div class="story-summary">With ORR vacancy at 9.8%, rents are nudging ₹115-120 psf/month — a 6% uplift from December 2025 levels.</div>
+        <div class="story-headline">Prestige Group eyes ₹3,000 crore Bangalore commercial acquisition before FY-end</div>
+        <div class="story-summary">Promoter group is in advanced talks for a marquee ORR asset; deal would add 2.5 msf to Prestige's Bangalore commercial portfolio.</div>
       </div>
       
     </div>
@@ -607,8 +615,8 @@
     
     <div class="story-list-item">
       <div class="section-label">QUICK HIT</div>
-      <div class="story-list-headline">Karnataka govt fast-tracks IT corridor extension to Attibele — 3 msf of new supply expected by 2028</div>
-      <div class="story-summary">The move is aimed at decongesting Whitefield and Electronic City; site allocation notifications expected by June.</div>
+      <div class="story-list-headline">Karnataka plans 1,200-acre 'AI Tech Park' near Devanahalli to attract hyperscaler demand</div>
+      <div class="story-summary">State government has shortlisted land for a dedicated AI/data-centre-plus-office campus to complement KIADB's existing aerospace SEZ.</div>
     </div>
     
     </div>
@@ -626,38 +634,42 @@
     <div class="two-col">
       
       <div class="col-story">
+        
         <div class="story-image img-deal">
-          <span class="story-image-label">PRE-COMMITMENT</span>
+          <span class="story-image-label">NEW LEASE</span>
         </div>
+        
         <div class="section-label" style="margin-top:10px;">
           DEAL DESK
           <span class="read-time">· Outer Ring Road</span>
         </div>
-        <div class="story-headline">Walmart Global Tech inks 2.2 lakh sq ft pre-commitment at Embassy TechVillage Phase 4</div>
-        <div class="story-summary">Walmart Global Tech has signed a pre-commitment for 2.2 lakh sq ft at Embassy TechVillage's upcoming Phase 4 tower on ORR, with fit-out slated to begin Q3 2026. The deal consolidates two existing Walmart offices in Bellandur into a single campus. CBRE acted for the occupier; Embassy handled in-house.</div>
+        <div class="story-headline">Infosys expands Pune-to-Bangalore shift: 1.5 lakh sq ft new lease at RMZ Ecoworld</div>
+        <div class="story-summary">Infosys has signed a new 1.5 lakh sq ft lease at RMZ Ecoworld on ORR to house teams being consolidated from its older Pune campus. The 5-year lease — with JLL acting as tenant advisors — reflects Infosys's decision to co-locate certain delivery practices with client-facing GCC teams it services in Bangalore. Fit-out work begins Q2 2026 with occupation expected by September.</div>
         
-        <div class="story-insight">Pre-commitments at this scale signal that large tech GCCs are locking supply 18-24 months ahead — a landlord-friendly dynamic that will keep ORR rents elevated through 2027.</div>
+        <div class="story-insight">Large IT services firms consolidating geographies into Bangalore signals the city remains the default operations hub for enterprise tech — a demand floor independent of GCC cycles.</div>
         
         
-        <a href="https://economictimes.indiatimes.com/industry/services/property-/-cstruction/walmart-global-tech-leases-office-space-bangalore/articleshow/sample.cms" class="read-more" style="font-size:12px;">Details →</a>
+        <a href="https://realty.economictimes.indiatimes.com/news/commercial" class="read-more" style="font-size:12px;">Details →</a>
         
       </div>
       
       <div class="col-story">
+        
         <div class="story-image img-deal">
-          <span class="story-image-label">EXPANSION</span>
+          <span class="story-image-label">NEW LEASE</span>
         </div>
+        
         <div class="section-label" style="margin-top:10px;">
           DEAL DESK
-          <span class="read-time">· Whitefield</span>
+          <span class="read-time">· Koramangala</span>
         </div>
-        <div class="story-headline">PhonePe expands footprint with 85,000 sq ft new lease at Salarpuria Sattva Knowledge City</div>
-        <div class="story-summary">PhonePe has taken an additional 85,000 sq ft floor at Salarpuria Sattva Knowledge City to house its growing payments infrastructure and risk engineering teams. The fintech now occupies approximately 2.1 lakh sq ft across the complex. Lease tenure is 5 years with a 15% escalation clause at year 3.</div>
+        <div class="story-headline">Swiggy takes 45,000 sq ft at Salarpuria Sattva Opus near Koramangala</div>
+        <div class="story-summary">Food-tech major Swiggy has leased a full floor at Salarpuria Sattva Opus near Koramangala for its expanded product, engineering and growth teams. The company is relocating from a mix of co-working seats spread across three centres into a single branded campus. The lease is structured for 4 years.</div>
         
-        <div class="story-insight">Fintech's office footprint in Bangalore continues to punch above its sector weight — PhonePe's expansion is the third BFSI-adjacent deal in Whitefield this fortnight.</div>
+        <div class="story-insight">Consumer tech's return to owned-floor offices in South Bangalore indicates the work-from-anywhere experiment has run its course at the leadership level.</div>
         
         
-        <a href="https://www.livemint.com/companies/phonepe-office-space-bangalore-whitefield/sample" class="read-more" style="font-size:12px;">Details →</a>
+        <a href="https://realty.economictimes.indiatimes.com/news/commercial" class="read-more" style="font-size:12px;">Details →</a>
         
       </div>
       
@@ -671,15 +683,15 @@
     
     <div class="story-list-item">
       <div class="story-meta">
-        <span class="story-meta-tag highlight">New Lease</span>
-        <span class="story-meta-tag">Koramangala</span>
-        <span class="story-meta-tag">55,000 sq ft</span>
-        <span class="story-meta-tag">Meesho</span>
+        <span class="story-meta-tag highlight">Acquisition</span>
+        <span class="story-meta-tag">Hebbal</span>
+        <span class="story-meta-tag">3,20,000 sq ft</span>
+        <span class="story-meta-tag">Brookfield Asset Management</span>
       </div>
-      <div class="story-list-headline">Meesho signs 55,000 sq ft lease in Koramangala's RMZ Ecospace annex</div>
-      <div class="story-summary">Social commerce platform Meesho has leased a full floor at RMZ Ecospace's recently completed annex block in Koramangala. The company is consolidating product and design teams from a co-working setup into a branded office. Deal structured as a 3-year lease with two 1-year renewal options.</div>
-      <div class="story-insight">Meesho's shift from flex to owned-feel office reflects a broader D2C/e-commerce trend: hypergrowth-phase companies graduating into mid-size leases as they mature.</div>
-      
+      <div class="story-list-headline">Brookfield acquires 3.2 lakh sq ft strata office asset in Hebbal for ₹620 crore</div>
+      <div class="story-summary">Canadian asset manager Brookfield has acquired a strata-titled Grade-A office complex in Hebbal for approximately ₹620 crore, adding to its growing Bangalore institutional portfolio alongside Candor TechSpace and Bagmane assets. The asset is 82% leased with a weighted average lease expiry of 4.5 years.</div>
+      <div class="story-insight">Brookfield's continued Bangalore accumulation is a vote of confidence in long-run rent growth — institutional capital sees the vacancy compression as durable, not cyclical.</div>
+      <a href="https://www.businessline.com/companies/real-estate" class="read-more" style="font-size:12px;">Details →</a>
     </div>
     
     <div class="story-list-item">
@@ -689,10 +701,10 @@
         <span class="story-meta-tag">12,000 sq ft</span>
         <span class="story-meta-tag">myHQ</span>
       </div>
-      <div class="story-list-headline">myHQ HSR Layout centre reaches 100% occupancy; waitlist opens for first time</div>
-      <div class="story-summary">myHQ's HSR Layout managed workspace — a 12,000 sq ft centre near Agara Lake — hit full occupancy for the first time in March 2026, with a waitlist of 34 teams across 8 companies now active. The centre houses 18 dedicated offices ranging from 4-seat cabins to 40-seat suites.</div>
-      <div class="story-insight">Full occupancy with an active waitlist is a leading indicator: a second myHQ HSR centre or an adjacent micro-market expansion (Sarjapur, BTM) looks increasingly justified.</div>
-      
+      <div class="story-list-headline">myHQ HSR Layout hits 100% occupancy; waitlist of 34 teams opens</div>
+      <div class="story-summary">myHQ's HSR Layout managed workspace reached full occupancy for the first time in March 2026, with 18 dedicated offices fully committed and a waitlist of 34 teams across 8 companies now active. Demand is driven primarily by Series B-D tech and fintech startups seeking branded, sub-15-seat offices close to South Bangalore talent clusters.</div>
+      <div class="story-insight">Full occupancy with an active waitlist is a clear signal: a second HSR centre or an expansion into Sarjapur / BTM will absorb demand quickly.</div>
+      <a href="https://myhq.in/office-space/bangalore" class="read-more" style="font-size:12px;">Details →</a>
     </div>
     
     </div>
@@ -709,14 +721,14 @@
     
     <div class="story-list-item">
       <div class="story-meta">
-        <span class="story-meta-tag highlight">Announced</span>
-        <span class="story-meta-tag">Hebbal</span>
-        <span class="story-meta-tag">18 lakh sq ft</span>
+        <span class="story-meta-tag highlight">Under Construction</span>
+        <span class="story-meta-tag">Outer Ring Road</span>
+        <span class="story-meta-tag">28 lakh sq ft</span>
       </div>
-      <div class="story-list-headline">Prestige Group launches 'Prestige Technocrat' — 1.8 msf Grade-A campus in Hebbal</div>
-      <div class="story-summary">Prestige Group has officially announced Prestige Technocrat, a 1.8 msf mixed-use office campus in Hebbal adjacent to its existing Prestige Tech Park North. The project comprises three towers with floor plates of 40,000-60,000 sq ft, targeting GCC and BFSI tenants. Completion expected H2 2028. Pre-leasing conversations are reportedly underway with two US-headquartered GCCs.</div>
-      <div class="story-insight">Prestige doubling down on Hebbal — already home to Manyata Tech Park — will intensify competition for north Bangalore GCC mandates and may create a true multi-landlord corridor to rival ORR.</div>
-      <a href="https://www.businessline.com/companies/prestige-group-hebbal-office-campus/sample" class="read-more" style="font-size:12px;">Read more →</a>
+      <div class="story-list-headline">Embassy TechVillage Phase 4 tops out — 2.8 msf tower ready for fit-out in Q3 2026</div>
+      <div class="story-summary">Embassy Office Parks has completed the structural topping-out of Phase 4 at TechVillage on ORR, bringing 2.8 msf of new Grade-A space to practical completion readiness. The tower — designed with 60,000 sq ft floor plates for GCC-scale tenants — is 65% pre-leased, with two large mandates in documentation and fit-out expected to begin by August 2026.</div>
+      <div class="story-insight">65% pre-leased at topping-out is among the strongest lease-up rates Embassy has seen since Manyata Business Park's peak absorption years — a direct reflection of GCC demand depth.</div>
+      <a href="https://embassyofficeparks.com/properties/embassy-techvillage/" class="read-more" style="font-size:12px;">Read more →</a>
     </div>
     
     <div class="story-list-item">
@@ -725,10 +737,10 @@
         <span class="story-meta-tag">CV Raman Nagar</span>
         <span class="story-meta-tag">9 lakh sq ft</span>
       </div>
-      <div class="story-list-headline">Bagmane Developers breaks ground on World Trade Centre Bengaluru Tower 3 in CV Raman Nagar</div>
-      <div class="story-summary">Bagmane has commenced construction on the third tower of its World Trade Centre Bengaluru complex, adding 9 lakh sq ft of Grade-A space to a campus that already houses Accenture, Capgemini, and SAP. Tower 3 is designed to LEED Platinum standards with 50,000 sq ft floor plates. Delivery expected Q4 2027.</div>
-      <div class="story-insight">Tower 3 will test whether CV Raman Nagar can absorb another large block outside of ORR — Bagmane's track record of deep tenant relationships reduces lease-up risk significantly.</div>
-      
+      <div class="story-list-headline">Bagmane breaks ground on 9 lakh sq ft Tower 3 at World Trade Centre Bengaluru</div>
+      <div class="story-summary">Bagmane has commenced foundation work on Tower 3 of its World Trade Centre Bengaluru complex in CV Raman Nagar. The 9 lakh sq ft LEED-Platinum tower with 50,000 sq ft floor plates is targeted at mid-size GCC and IT services tenants. Delivery is expected Q4 2027; pre-leasing conversations are reportedly active with three international occupiers.</div>
+      <div class="story-insight">Bagmane's phased delivery model — never over-supplying the market — gives it one of the best lease-up track records in Bangalore; Tower 3 is unlikely to be different.</div>
+      <a href="https://www.bagmane.com/bagmane-world-trade-centre" class="read-more" style="font-size:12px;">Read more →</a>
     </div>
     
     </div>
@@ -736,46 +748,6 @@
     <!-- /developer_watch -->
 
     <!-- ── TALENT MOVES ── -->
-    
-    <hr class="divider-thick">
-    <div class="section-heading">Talent Moves</div>
-
-    <div class="talent-list">
-    
-    <div class="talent-row">
-      <div class="talent-initial">R</div>
-      <div class="talent-info">
-        <div class="talent-name">Rahul Arora</div>
-        <div class="talent-transition">
-          Managing Director — Occupier Services, CBRE South Asia
-          <span class="arrow"> → </span>
-          Chief Business Officer, Smartworks Co-working
-        </div>
-        <div class="talent-brief">Rahul Arora, who built CBRE's occupier advisory practice across South Asia over 11 years, has joined Smartworks as CBO to lead enterprise sales, market expansion, and product-market fit for managed campuses. He takes charge with immediate effect and will be based in Bangalore.</div>
-        
-        <div class="talent-matters">Senior talent moving from transactional brokerage to flex operators signals growing conviction in the managed workspace model at the enterprise level.</div>
-        
-      </div>
-    </div>
-    
-    <div class="talent-row">
-      <div class="talent-initial">D</div>
-      <div class="talent-info">
-        <div class="talent-name">Deepa Nair</div>
-        <div class="talent-transition">
-          Head of Real Estate, India — Flipkart
-          <span class="arrow"> → </span>
-          VP Real Estate & Workplace, Zepto
-        </div>
-        <div class="talent-brief">Deepa Nair, who oversaw Flipkart's 3.5 msf office and fulfilment-centre portfolio for 5 years, has joined Zepto as VP Real Estate & Workplace to lead the quick-commerce company's rapid dark store and HQ expansion. She joins a team that has added 12 lakh sq ft of space in 14 months.</div>
-        
-        <div class="talent-matters">Zepto's aggressive real estate hiring signals that Q-commerce is entering a phase where operational excellence in space — not just speed — will differentiate winners.</div>
-        
-      </div>
-    </div>
-    
-    </div>
-
     <!-- /talent_moves -->
 
     <!-- ── MARKET PULSE ── -->
@@ -785,7 +757,7 @@
 
     
     <div class="section-label" style="margin-bottom:14px;">
-      Bangalore Q1 2026: Absorption outpaces supply for third consecutive quarter
+      Bangalore Q1 2026: Third consecutive quarter of absorption outpacing supply
     </div>
     
 
@@ -832,7 +804,7 @@
     
 
     
-    <div class="market-narrative">Bangalore's office market is in a supply-demand sweet spot: absorption continues to outpace new completions for the third consecutive quarter, compressing Grade-A vacancy from 16.1% to 14.2% in just 90 days. The ₹108 psf/month average rent masks wide micro-market divergence — ORR and Whitefield command ₹115-125, while HSR Layout and Sarjapur Road remain accessible at ₹80-95, attracting a different but growing tenant profile. With 3.3 msf of new supply completing in Q1 being absorbed in near real-time, landlords across Bangalore have regained pricing power they lost in 2022-23. Watch for a re-rating of secondary corridors as ORR rents push toward ₹130 psf/month through the year.</div>
+    <div class="market-narrative">Bangalore's office market is in a supply-demand sweet spot that hasn't been seen since 2019: net absorption of 4.1 msf in Q1 2026 comfortably outpaced 3.3 msf of new completions, compressing Grade-A vacancy from 16.1% to 14.2% in a single quarter. The ₹108 psf/month citywide average conceals a wide micro-market spread — ORR and Whitefield command ₹115-125 while HSR Layout and Sarjapur Road remain accessible at ₹80-95, attracting a different but growing tenant profile dominated by startups and mid-size flex occupiers. With landlords now holding pricing power across most Grade-A corridors, the debate has shifted from 'will rents recover?' to 'how far and how fast?' — consensus sits at ORR breaking ₹130 psf/month before December 2026. Source: JLL India Research, Knight Frank India H1 2026 report.</div>
     
 
     <!-- /market_pulse -->
