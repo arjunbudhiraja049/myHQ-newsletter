@@ -89,7 +89,8 @@ Write the complete Office Pulse newsletter for {region_name}. Return ONLY a vali
       "area_sqft": "XX,XXX sq ft — or 'Undisclosed' if not reported",
       "deal_type": "New Lease|Renewal|Expansion|Pre-Commitment|Seat Deal",
       "body": "2-3 sentences: what happened, who's involved, context",
-      "insight": "What this deal signals about the market — 1 actionable sentence"
+      "insight": "What this deal signals about the market — 1 actionable sentence",
+      "source_url": "URL of the original news article, or empty string if unavailable"
     }}
   ],
   "developer_watch": [
@@ -101,7 +102,8 @@ Write the complete Office Pulse newsletter for {region_name}. Return ONLY a vali
       "area_sqft": "Total leasable area",
       "status": "Announced|Under Construction|Completed|Pre-Leasing|REIT Acquisition",
       "body": "2-3 sentences on the project, timeline, significance",
-      "insight": "Market implication — 1 sentence"
+      "insight": "Market implication — 1 sentence",
+      "source_url": "URL of the original news article, or empty string if unavailable"
     }}
   ],
   "talent_moves": [
@@ -110,7 +112,8 @@ Write the complete Office Pulse newsletter for {region_name}. Return ONLY a vali
       "previous_role": "Previous Title, Previous Company",
       "new_role": "New Title, New Company",
       "brief": "2 sentences: what they're taking on and their background",
-      "why_it_matters": "Why the market should pay attention — 1 sentence"
+      "why_it_matters": "Why the market should pay attention — 1 sentence",
+      "source_url": "URL of the original news article, or empty string if unavailable"
     }}
   ],
   "market_pulse": {{
@@ -151,7 +154,8 @@ Write the complete Office Pulse newsletter for {region_name}. Return ONLY a vali
     "headline": "Deep-dive story headline — the most interesting trend or story in the data",
     "sub_headline": "One-sentence teaser that makes the reader want to read on",
     "body": "4-6 sentences of analysis — connect dots, give context, cite specific examples from the data",
-    "key_takeaway": "The one thing readers should remember from this story — 1-2 sentences"
+    "key_takeaway": "The one thing readers should remember from this story — 1-2 sentences",
+    "source_url": "URL of the primary source article for this story, or empty string"
   }}
 }}
 

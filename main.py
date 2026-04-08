@@ -13,6 +13,7 @@ Usage:
   python main.py --region chennai_hyderabad
   python main.py --region mumbai_pune
   python main.py --all
+  python main.py --region bangalore --recipient "Arjun"
 
 Output: HTML file(s) saved to ./output/
 """
@@ -57,7 +58,8 @@ def get_region(region_id: str, regions: list[dict]) -> dict:
     sys.exit(1)
 
 
-def render_html(region: dict, newsletter: dict, date_str: str, period: str) -> str:
+def render_html(region: dict, newsletter: dict, date_str: str, period: str,
+                recipient_name: str = "Reader") -> str:
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
     template = env.get_template("newsletter.html")
     return template.render(
@@ -65,6 +67,7 @@ def render_html(region: dict, newsletter: dict, date_str: str, period: str) -> s
         newsletter=newsletter,
         date=date_str,
         period=period,
+        recipient_name=recipient_name,
     )
 
 
@@ -78,7 +81,7 @@ def save_output(html: str, region_id: str, date_str: str) -> Path:
     return out_path
 
 
-def generate_for_region(region: dict, voice: dict) -> None:
+def generate_for_region(region: dict, voice: dict, recipient_name: str = "Reader") -> None:
     region_name = region["name"]
     today = datetime.now()
     date_str = today.strftime("%B %d, %Y")
@@ -114,7 +117,7 @@ def generate_for_region(region: dict, voice: dict) -> None:
 
     # ── Step 4: Render & Save ──────────────────────────────────────────────
     print("\n[4/4] RENDERING — building HTML...")
-    html = render_html(region, newsletter, date_str, period)
+    html = render_html(region, newsletter, date_str, period, recipient_name)
     out_path = save_output(html, region["id"], date_str)
 
     print(f"\n  ✓ Newsletter saved → {out_path.relative_to(ROOT)}")
@@ -141,16 +144,21 @@ def main():
         action="store_true",
         help="Generate newsletters for all 4 regions",
     )
+    parser.add_argument(
+        "--recipient",
+        default="Reader",
+        help="Recipient first name for the greeting (default: Reader)",
+    )
     args = parser.parse_args()
 
     regions, voice = load_config()
 
     if args.all:
         for region in regions:
-            generate_for_region(region, voice)
+            generate_for_region(region, voice, args.recipient)
     else:
         region = get_region(args.region, regions)
-        generate_for_region(region, voice)
+        generate_for_region(region, voice, args.recipient)
 
     print("\nDone.\n")
 
