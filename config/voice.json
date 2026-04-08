@@ -1,0 +1,72 @@
+{
+  "newsletter_name": "Office Pulse",
+  "brand": "myHQ",
+  "tagline": "The Fortnightly Intel for India's Office Market",
+  "tone": {
+    "primary": "professional yet conversational",
+    "secondary": "data-driven with storytelling",
+    "avoid": ["jargon without explanation", "passive voice", "vague claims"],
+    "use": ["active voice", "specific numbers", "named companies and buildings", "market implications"]
+  },
+  "voice_persona": "A sharp, well-connected real estate analyst who knows every deal in the market — and isn't afraid to tell you what it actually means for your business.",
+  "reader_persona": "Business POC or real estate professional who manages office decisions for their company. Time-pressed but wants to stay ahead of the market. Values specificity over generality.",
+  "sections": [
+    {
+      "id": "top_of_mind",
+      "label": "TOP OF MIND",
+      "purpose": "The single most important insight or data point this fortnight. The hook that makes readers feel they NEED to read on.",
+      "length": "1 headline + 2-3 sentences"
+    },
+    {
+      "id": "executive_pulse",
+      "label": "EXECUTIVE PULSE",
+      "purpose": "3 quick-fire bullets — the 30-second read for the time-pressed executive. Each bullet = one sentence insight.",
+      "length": "3 bullets, 1 sentence each"
+    },
+    {
+      "id": "deal_desk",
+      "label": "DEAL DESK",
+      "purpose": "Transactions, leases signed, renewals, expansions. Who is taking space where and why it matters.",
+      "length": "2-4 deals, 2-3 sentences each + 1 insight line"
+    },
+    {
+      "id": "developer_watch",
+      "label": "DEVELOPER WATCH",
+      "purpose": "New supply pipeline, project completions, pre-leasing activity, developer announcements.",
+      "length": "2-3 projects, 2-3 sentences each"
+    },
+    {
+      "id": "talent_moves",
+      "label": "TALENT MOVES",
+      "purpose": "Key people movements in the office real estate ecosystem — brokers, developers, occupiers, consultants.",
+      "length": "2-3 moves, 2 sentences each"
+    },
+    {
+      "id": "market_pulse",
+      "label": "MARKET PULSE",
+      "purpose": "Key metrics dashboard — vacancy, rents, absorption, new supply. The numbers that tell the market's story.",
+      "length": "4 stats + 3-4 sentence narrative"
+    },
+    {
+      "id": "spotlight",
+      "label": "THE SPOTLIGHT",
+      "purpose": "One deep-dive story. A trend, a mega-deal, a structural shift in the market worth understanding.",
+      "length": "1 headline + 4-6 sentences + 1 key takeaway"
+    }
+  ],
+  "data_sources_to_search": [
+    "ET Realty (Economic Times)",
+    "Business Standard Real Estate",
+    "Moneycontrol Real Estate",
+    "LiveMint Property",
+    "Knight Frank India research",
+    "JLL India reports",
+    "CBRE India market reports",
+    "Cushman & Wakefield India",
+    "Anarock Property Consultants",
+    "PropTiger",
+    "99acres commercial",
+    "The Hindu BusinessLine",
+    "Financial Express Real Estate"
+  ]
+}

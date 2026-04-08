@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>myHQ Office Pulse — {{ region.display_name }}</title>
+  <style>
+    /* ─── Base Reset ─── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+      background: #EEEDE8;
+      color: #1A1A2E;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: #E87722; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ─── Layout Shell ─── */
+    .shell {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    /* ─── Top Bar ─── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0 16px;
+      font-size: 11px;
+      color: #777;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .top-bar strong { color: #E87722; font-weight: 700; }
+
+    /* ─── Header ─── */
+    .header {
+      background: #0D1B2A;
+      border-radius: 12px 12px 0 0;
+      padding: 36px 36px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(232, 119, 34, 0.08);
+    }
+    .header-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .brand {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E87722;
+    }
+    .edition-badge {
+      font-size: 11px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.6);
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .header-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 8px;
+    }
+    .header-region {
+      font-size: 36px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .header-period {
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+    .header-period strong { color: rgba(255,255,255,0.8); }
+    .header-divider {
+      margin-top: 24px;
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .header-tagline {
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+    }
+
+    /* ─── Card Shell (shared) ─── */
+    .card {
+      background: #FFFFFF;
+      border-radius: 0;
+      padding: 32px 36px;
+      border-bottom: 1px solid #ECEAE4;
+    }
+    .card:last-child { border-bottom: none; border-radius: 0 0 12px 12px; }
+    .card-first { border-radius: 0; }
+
+    /* ─── Section Label ─── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #E87722;
+      margin-bottom: 20px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 14px;
+      background: #E87722;
+      border-radius: 2px;
+    }
+
+    /* ─── Top of Mind ─── */
+    .top-of-mind {
+      background: linear-gradient(135deg, #0D1B2A 0%, #1B3A5C 100%);
+      padding: 28px 36px;
+      border-left: 4px solid #E87722;
+    }
+    .tom-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #E87722;
+      margin-bottom: 12px;
+    }
+    .tom-headline {
+      font-size: 22px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .tom-body {
+      font-size: 14px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+    }
+
+    /* ─── Executive Pulse ─── */
+    .exec-pulse-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 560px) {
+      .exec-pulse-grid { grid-template-columns: 1fr; }
+    }
+    .pulse-card {
+      background: #F8F7F4;
+      border-radius: 8px;
+      padding: 16px;
+      border-top: 3px solid #E87722;
+    }
+    .pulse-headline {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1A1A2E;
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
+    .pulse-brief {
+      font-size: 12px;
+      color: #6B7280;
+      line-height: 1.5;
+    }
+
+    /* ─── Deal Desk / Developer Watch ─── */
+    .deal-item {
+      padding: 20px 0;
+      border-bottom: 1px solid #F0EEE8;
+    }
+    .deal-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .deal-item:first-child { padding-top: 0; }
+
+    .deal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .deal-headline {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0D1B2A;
+      line-height: 1.3;
+      flex: 1;
+    }
+    .deal-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge-new-lease { background: #D1FAE5; color: #065F46; }
+    .badge-renewal   { background: #DBEAFE; color: #1E40AF; }
+    .badge-expansion { background: #FEF3C7; color: #92400E; }
+    .badge-pre-commitment { background: #EDE9FE; color: #4C1D95; }
+    .badge-seat-deal { background: #FCE7F3; color: #9D174D; }
+    .badge-announced { background: #FEF3C7; color: #92400E; }
+    .badge-under-construction { background: #DBEAFE; color: #1E40AF; }
+    .badge-completed { background: #D1FAE5; color: #065F46; }
+    .badge-pre-leasing { background: #EDE9FE; color: #4C1D95; }
+    .badge-reit { background: #FDE8E8; color: #9B1C1C; }
+
+    .deal-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .deal-meta-item {
+      font-size: 12px;
+      color: #6B7280;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .deal-meta-item strong { color: #374151; font-weight: 600; }
+    .deal-body {
+      font-size: 13.5px;
+      color: #374151;
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .deal-insight {
+      background: #FFF8F2;
+      border-left: 3px solid #E87722;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: #7C3D0F;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.55;
+    }
+    .deal-insight::before {
+      content: '💡 ';
+    }
+
+    /* ─── Talent Moves ─── */
+    .talent-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #F0EEE8;
+      align-items: flex-start;
+    }
+    .talent-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .talent-item:first-child { padding-top: 0; }
+    .talent-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0D1B2A, #1B3A5C);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #E87722;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+    .talent-content { flex: 1; }
+    .talent-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0D1B2A;
+      margin-bottom: 2px;
+    }
+    .talent-move {
+      font-size: 12px;
+      color: #6B7280;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .talent-move .arrow { color: #E87722; font-weight: 700; margin: 0 4px; }
+    .talent-brief {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+    .talent-matters {
+      font-size: 12px;
+      color: #6B7280;
+      font-style: italic;
+    }
+
+    /* ─── Market Pulse ─── */
+    .market-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .market-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-box {
+      background: #F8F7F4;
+      border-radius: 8px;
+      padding: 16px 12px;
+      text-align: center;
+      border-bottom: 3px solid transparent;
+    }
+    .stat-box.trend-up { border-bottom-color: #10B981; }
+    .stat-box.trend-down { border-bottom-color: #EF4444; }
+    .stat-box.trend-flat { border-bottom-color: #94A3B8; }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #9CA3AF;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0D1B2A;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-trend {
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .stat-trend.up { color: #10B981; }
+    .stat-trend.down { color: #EF4444; }
+    .stat-trend.flat { color: #94A3B8; }
+    .stat-context {
+      font-size: 10px;
+      color: #9CA3AF;
+      margin-top: 2px;
+    }
+
+    .market-narrative {
+      font-size: 14px;
+      color: #374151;
+      line-height: 1.7;
+      background: #F8F7F4;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    /* ─── Spotlight ─── */
+    .spotlight-card {
+      background: #FFFFFF;
+    }
+    .spotlight-inner {
+      background: linear-gradient(135deg, #FFF8F2 0%, #FFF4EA 100%);
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #FFE0C2;
+    }
+    .spotlight-sub-headline {
+      font-size: 13px;
+      color: #9D4E0F;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .spotlight-headline {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0D1B2A;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+    .spotlight-body {
+      font-size: 14px;
+      color: #374151;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .spotlight-takeaway {
+      background: #0D1B2A;
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #FFFFFF;
+      line-height: 1.6;
+    }
+    .spotlight-takeaway::before {
+      content: '★ KEY TAKEAWAY  ';
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #E87722;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      padding: 0 16px;
+    }
+    .footer-logo {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0D1B2A;
+      letter-spacing: 1px;
+    }
+    .footer-logo span { color: #E87722; }
+    .footer-region {
+      font-size: 12px;
+      color: #9CA3AF;
+      margin: 4px 0 16px;
+    }
+    .footer-links {
+      font-size: 11px;
+      color: #9CA3AF;
+    }
+    .footer-links a { color: #9CA3AF; }
+    .footer-disclaimer {
+      margin-top: 12px;
+      font-size: 10px;
+      color: #B0AEAA;
+      line-height: 1.6;
+    }
+
+    /* ─── Print / No-Script Friendly ─── */
+    @media print {
+      body { background: white; }
+      .shell { padding: 0; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Top navigation bar -->
+  <div class="top-bar">
+    <span><strong>myHQ</strong> Office Pulse</span>
+    <span>{{ period }} &nbsp;·&nbsp; {{ region.display_name }}</span>
+  </div>
+
+  <!-- ─── HEADER ─── -->
+  <div class="header">
+    <div class="header-meta">
+      <div class="brand">myHQ · Office Pulse</div>
+      <div class="edition-badge">{{ date }}</div>
+    </div>
+    <div class="header-title">Fortnightly Intelligence</div>
+    <div class="header-region">{{ region.display_name }}</div>
+    <div class="header-period">
+      Coverage period: <strong>{{ period }}</strong>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-tagline">Everything that moved the office market this fortnight — curated for the people who move it.</div>
+  </div>
+
+  <!-- ─── TOP OF MIND ─── -->
+  {% if newsletter.top_of_mind %}
+  <div class="top-of-mind">
+    <div class="tom-label">Top of Mind</div>
+    <div class="tom-headline">{{ newsletter.top_of_mind.headline }}</div>
+    <div class="tom-body">{{ newsletter.top_of_mind.body }}</div>
+  </div>
+  {% endif %}
+
+  <!-- ─── EXECUTIVE PULSE ─── -->
+  {% if newsletter.executive_pulse %}
+  <div class="card card-first">
+    <div class="section-label">Executive Pulse · 30-sec read</div>
+    <div class="exec-pulse-grid">
+      {% for item in newsletter.executive_pulse %}
+      <div class="pulse-card">
+        <div class="pulse-headline">{{ item.headline }}</div>
+        <div class="pulse-brief">{{ item.brief }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ─── DEAL DESK ─── -->
+  {% if newsletter.deal_desk %}
+  <div class="card">
+    <div class="section-label">Deal Desk</div>
+    {% for deal in newsletter.deal_desk %}
+    <div class="deal-item">
+      <div class="deal-header">
+        <div class="deal-headline">{{ deal.headline }}</div>
+        {% set deal_type_lower = deal.deal_type | lower | replace(' ', '-') %}
+        {% if 'new' in deal_type_lower %}
+          <span class="deal-badge badge-new-lease">{{ deal.deal_type }}</span>
+        {% elif 'renewal' in deal_type_lower %}
+          <span class="deal-badge badge-renewal">{{ deal.deal_type }}</span>
+        {% elif 'expansion' in deal_type_lower %}
+          <span class="deal-badge badge-expansion">{{ deal.deal_type }}</span>
+        {% elif 'pre' in deal_type_lower %}
+          <span class="deal-badge badge-pre-commitment">{{ deal.deal_type }}</span>
+        {% elif 'seat' in deal_type_lower %}
+          <span class="deal-badge badge-seat-deal">{{ deal.deal_type }}</span>
+        {% else %}
+          <span class="deal-badge badge-new-lease">{{ deal.deal_type }}</span>
+        {% endif %}
+      </div>
+      <div class="deal-meta">
+        {% if deal.company %}<span class="deal-meta-item">🏢 <strong>{{ deal.company }}</strong></span>{% endif %}
+        {% if deal.building %}<span class="deal-meta-item">📍 {{ deal.building }}</span>{% endif %}
+        {% if deal.micro_market %}<span class="deal-meta-item">🗺 {{ deal.micro_market }}</span>{% endif %}
+        {% if deal.area_sqft %}<span class="deal-meta-item">📐 {{ deal.area_sqft }}</span>{% endif %}
+      </div>
+      <div class="deal-body">{{ deal.body }}</div>
+      {% if deal.insight %}
+      <div class="deal-insight">{{ deal.insight }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ─── DEVELOPER WATCH ─── -->
+  {% if newsletter.developer_watch %}
+  <div class="card">
+    <div class="section-label">Developer Watch</div>
+    {% for proj in newsletter.developer_watch %}
+    <div class="deal-item">
+      <div class="deal-header">
+        <div class="deal-headline">{{ proj.headline }}</div>
+        {% set status_lower = proj.status | lower | replace(' ', '-') %}
+        {% if 'announced' in status_lower %}
+          <span class="deal-badge badge-announced">{{ proj.status }}</span>
+        {% elif 'construction' in status_lower %}
+          <span class="deal-badge badge-under-construction">{{ proj.status }}</span>
+        {% elif 'completed' in status_lower %}
+          <span class="deal-badge badge-completed">{{ proj.status }}</span>
+        {% elif 'pre-leasing' in status_lower or 'leasing' in status_lower %}
+          <span class="deal-badge badge-pre-leasing">{{ proj.status }}</span>
+        {% elif 'reit' in status_lower %}
+          <span class="deal-badge badge-reit">{{ proj.status }}</span>
+        {% else %}
+          <span class="deal-badge badge-announced">{{ proj.status }}</span>
+        {% endif %}
+      </div>
+      <div class="deal-meta">
+        {% if proj.developer %}<span class="deal-meta-item">🏗 <strong>{{ proj.developer }}</strong></span>{% endif %}
+        {% if proj.project %}<span class="deal-meta-item">🏛 {{ proj.project }}</span>{% endif %}
+        {% if proj.micro_market %}<span class="deal-meta-item">📍 {{ proj.micro_market }}</span>{% endif %}
+        {% if proj.area_sqft %}<span class="deal-meta-item">📐 {{ proj.area_sqft }}</span>{% endif %}
+      </div>
+      <div class="deal-body">{{ proj.body }}</div>
+      {% if proj.insight %}
+      <div class="deal-insight">{{ proj.insight }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ─── TALENT MOVES ─── -->
+  {% if newsletter.talent_moves %}
+  <div class="card">
+    <div class="section-label">Talent Moves</div>
+    {% for move in newsletter.talent_moves %}
+    <div class="talent-item">
+      <div class="talent-avatar">{{ move.person[0] if move.person else '?' }}</div>
+      <div class="talent-content">
+        <div class="talent-name">{{ move.person }}</div>
+        <div class="talent-move">
+          <span>{{ move.previous_role }}</span>
+          <span class="arrow">→</span>
+          <span>{{ move.new_role }}</span>
+        </div>
+        <div class="talent-brief">{{ move.brief }}</div>
+        {% if move.why_it_matters %}
+        <div class="talent-matters">{{ move.why_it_matters }}</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ─── MARKET PULSE ─── -->
+  {% if newsletter.market_pulse %}
+  <div class="card">
+    <div class="section-label">Market Pulse</div>
+    {% if newsletter.market_pulse.headline %}
+    <h2 style="font-size:17px; font-weight:700; color:#0D1B2A; margin-bottom:16px; line-height:1.3;">
+      {{ newsletter.market_pulse.headline }}
+    </h2>
+    {% endif %}
+    {% if newsletter.market_pulse.stats %}
+    <div class="market-stats-grid">
+      {% for stat in newsletter.market_pulse.stats %}
+      <div class="stat-box trend-{{ stat.trend_direction }}">
+        <div class="stat-label">{{ stat.label }}</div>
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-trend {{ stat.trend_direction }}">
+          {% if stat.trend_direction == 'up' %}↑{% elif stat.trend_direction == 'down' %}↓{% else %}→{% endif %}
+          {{ stat.trend }}
+        </div>
+        {% if stat.context %}<div class="stat-context">{{ stat.context }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if newsletter.market_pulse.narrative %}
+    <div class="market-narrative">{{ newsletter.market_pulse.narrative }}</div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- ─── SPOTLIGHT ─── -->
+  {% if newsletter.spotlight %}
+  <div class="card spotlight-card">
+    <div class="section-label">The Spotlight</div>
+    <div class="spotlight-inner">
+      {% if newsletter.spotlight.sub_headline %}
+      <div class="spotlight-sub-headline">{{ newsletter.spotlight.sub_headline }}</div>
+      {% endif %}
+      <div class="spotlight-headline">{{ newsletter.spotlight.headline }}</div>
+      <div class="spotlight-body">{{ newsletter.spotlight.body }}</div>
+      {% if newsletter.spotlight.key_takeaway %}
+      <div class="spotlight-takeaway">{{ newsletter.spotlight.key_takeaway }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+</div><!-- /shell -->
+
+<!-- ─── FOOTER ─── -->
+<div class="footer">
+  <div class="footer-logo">my<span>HQ</span></div>
+  <div class="footer-region">Office Pulse · {{ region.display_name }} Edition</div>
+  <div class="footer-links">
+    <a href="#">Unsubscribe</a> &nbsp;·&nbsp;
+    <a href="#">Update Preferences</a> &nbsp;·&nbsp;
+    <a href="https://myhq.in">Visit myHQ</a>
+  </div>
+  <div class="footer-disclaimer">
+    © {{ date[-4:] }} myHQ. All rights reserved. This newsletter is for informational purposes only.
+    Market data is sourced from public reports and news. Always verify before making business decisions.
+  </div>
+</div>
+
+</body>
+</html>

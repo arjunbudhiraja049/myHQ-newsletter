@@ -1,0 +1,108 @@
+{
+  "regions": [
+    {
+      "id": "bangalore",
+      "name": "Bangalore",
+      "display_name": "Bangalore",
+      "sub_areas": [
+        "Whitefield", "Electronic City", "Outer Ring Road", "Hebbal",
+        "Manyata Tech Park", "Sarjapur Road", "Koramangala", "Indiranagar",
+        "CBD", "Marathahalli", "Bellandur", "ITPL", "Bagmane Tech Park",
+        "Brookefield", "Yelahanka", "Domlur", "Bomanahalli"
+      ],
+      "micro_markets": ["CBD", "SBD North", "SBD South", "PBD East", "PBD South"],
+      "search_keywords": [
+        "Bangalore office leasing deal",
+        "Bengaluru commercial real estate transaction",
+        "Bangalore Grade A office space",
+        "Whitefield office lease",
+        "ORR Bangalore office",
+        "Bangalore IT park new tenant",
+        "Karnataka office market vacancy rent absorption"
+      ],
+      "key_developers": [
+        "Prestige Group", "Embassy Group", "Brigade Group",
+        "Salarpuria Sattva", "RMZ Corp", "DivyaSree", "Bagmane Developers"
+      ],
+      "accent_color": "#1B4F72"
+    },
+    {
+      "id": "delhi_ncr",
+      "name": "Delhi NCR",
+      "display_name": "Delhi NCR",
+      "sub_areas": [
+        "Gurgaon Cyber City", "Golf Course Road", "NH-48 Gurgaon", "MG Road Gurgaon",
+        "Aerocity Delhi", "Connaught Place", "Nehru Place",
+        "Noida Expressway", "Sector 62 Noida", "Greater Noida",
+        "Faridabad", "Manesar", "Sohna Road"
+      ],
+      "micro_markets": ["CBD Delhi", "Aerocity", "Gurgaon NH-48", "Golf Course Extn", "Noida Expressway"],
+      "search_keywords": [
+        "Delhi NCR office leasing deal",
+        "Gurgaon commercial real estate transaction",
+        "Noida office space lease",
+        "Delhi Grade A office new tenant",
+        "NCR office market vacancy rent",
+        "Cyber City Gurgaon office deal",
+        "Aerocity office leasing"
+      ],
+      "key_developers": [
+        "DLF", "Godrej Properties", "M3M", "BPTP", "Elan Group",
+        "Sattva Group", "JMD Group", "Ansal API"
+      ],
+      "accent_color": "#154360"
+    },
+    {
+      "id": "chennai_hyderabad",
+      "name": "Chennai + Hyderabad",
+      "display_name": "Chennai + Hyderabad",
+      "sub_areas": [
+        "OMR Chennai", "Tidel Park Chennai", "Mount Road", "Taramani", "Perungudi",
+        "Sholinganallur", "Guindy", "Anna Salai",
+        "HITEC City Hyderabad", "Gachibowli", "Madhapur", "Kondapur",
+        "Nanakramguda", "Financial District", "Banjara Hills"
+      ],
+      "micro_markets": ["OMR North", "OMR South", "SBD Chennai", "HITEC City", "Gachibowli", "Financial District"],
+      "search_keywords": [
+        "Chennai office leasing deal",
+        "Hyderabad commercial real estate transaction",
+        "HITEC City office space lease",
+        "OMR Chennai office new tenant",
+        "Hyderabad Grade A office",
+        "Telangana office market vacancy",
+        "Chennai office market rent absorption"
+      ],
+      "key_developers": [
+        "Mindspace REIT", "My Home Group", "Prestige Group", "Phoenix Group",
+        "Lanco Hills", "Divyasree", "L&T Realty"
+      ],
+      "accent_color": "#0B5345"
+    },
+    {
+      "id": "mumbai_pune",
+      "name": "Mumbai + Pune",
+      "display_name": "Mumbai + Pune",
+      "sub_areas": [
+        "BKC Mumbai", "Lower Parel", "Andheri Kurla Road", "Powai", "Bandra",
+        "Nariman Point", "Navi Mumbai", "Thane", "Airoli", "Vashi",
+        "Hinjewadi Pune", "Kharadi", "Viman Nagar", "Magarpatta",
+        "Baner", "Wakad", "Pimpri Chinchwad"
+      ],
+      "micro_markets": ["BKC", "Lower Parel", "Andheri East", "Thane-Belapur", "Hinjewadi", "Kharadi"],
+      "search_keywords": [
+        "Mumbai office leasing deal",
+        "BKC commercial real estate transaction",
+        "Pune office space lease",
+        "Hinjewadi office new tenant",
+        "Mumbai Grade A office deal",
+        "Maharashtra office market vacancy rent",
+        "Navi Mumbai office leasing"
+      ],
+      "key_developers": [
+        "Godrej Properties", "K Raheja Corp", "Panchshil Realty",
+        "Gera Developments", "Marathon Group", "Oberoi Realty", "Kolte-Patil"
+      ],
+      "accent_color": "#4A235A"
+    }
+  ]
+}
