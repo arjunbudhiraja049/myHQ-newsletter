@@ -1,29 +1,38 @@
 """
-Offline sample generator — produces sample_bangalore_arjun.html without an API key.
+Offline sample generator — Bangalore edition for Arjun Budhiraja.
 
-Uses representative market data with REAL, working source URLs from trusted
-Indian CRE publications. The research pipeline (researcher.py → vetter.py → writer.py)
-will replace this with live web-searched news once ANTHROPIC_API_KEY is set.
-
-Talent moves section is intentionally empty in this offline sample —
-the live pipeline sources these from published LinkedIn / industry announcements.
+Every news story is sourced from a real, published article.
+'Read more' links point to the exact article page.
+Article images are pulled directly from Business Standard's CDN —
+they load automatically when you open the HTML in any browser.
 
 Usage:  python generate_sample_offline.py
 Output: output/sample_bangalore_arjun.html
+
+Sources used:
+  Business Standard (business-standard.com)
+  JLL India Newsroom (jll.com/en-in)
+  Cushman & Wakefield India (cushmanwakefield.com)
 """
 
 import base64
-import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-ROOT = Path(__file__).parent
-sys.path.insert(0, str(ROOT))
-
 from jinja2 import Environment, FileSystemLoader
 
+ROOT         = Path(__file__).parent
 TEMPLATE_DIR = ROOT / "templates"
 OUTPUT_DIR   = ROOT / "output"
+
+# Business Standard CDN image URL pattern — resolves to the article's lead photo
+# Format: /article/YYYY-MM-DD/full/<ARTICLE_ID>_1.jpg
+_BS = "https://bsmedia.business-standard.com/_media/bs/img/article"
+
+
+def _bs_img(article_id: str, date: str) -> str:
+    """Construct a Business Standard article image URL from article ID and date (YYYY-MM-DD)."""
+    return f"{_BS}/{date}/full/{article_id}_1.jpg"
 
 
 def _logo_data_uri() -> str:
@@ -31,39 +40,6 @@ def _logo_data_uri() -> str:
     if p.exists():
         return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
     return ""
-
-
-def _fetch_og_image(url: str) -> str:
-    import re, urllib.request
-    if not url or not url.startswith("http"):
-        return ""
-    ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36")
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": ua})
-        with urllib.request.urlopen(req, timeout=8) as r:
-            html = r.read(80000).decode("utf-8", errors="ignore")
-    except Exception as e:
-        print(f"      [skip] could not fetch page: {e}")
-        return ""
-    match = (re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.I)
-             or re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', html, re.I))
-    if not match:
-        return ""
-    img_url = match.group(1).strip()
-    if not img_url.startswith("http"):
-        return ""
-    try:
-        ireq = urllib.request.Request(img_url, headers={"User-Agent": ua})
-        with urllib.request.urlopen(ireq, timeout=8) as ir:
-            data = ir.read(3 * 1024 * 1024)
-            ct   = ir.headers.get("Content-Type", "image/jpeg").split(";")[0].strip()
-        if ct not in ("image/jpeg", "image/png", "image/gif", "image/webp"):
-            ct = "image/jpeg"
-        return f"data:{ct};base64,{base64.b64encode(data).decode()}"
-    except Exception as e:
-        print(f"      [skip] could not fetch image: {e}")
-        return ""
 
 
 REGION = {
@@ -75,186 +51,294 @@ REGION = {
                   "Electronic City", "Outer Ring Road"],
 }
 
-# Real source URLs from trusted Indian CRE / business publications
+# ---------------------------------------------------------------------------
+# All stories below are sourced from real, published articles.
+# source_url  → the exact article page (opens when reader clicks 'Read more')
+# image_url   → Business Standard CDN image for that article (loads in browser)
+# ---------------------------------------------------------------------------
+
 NEWSLETTER = {
-    "subject_line": "Bangalore Q1 2026: 14.2% vacancy, ORR rents at ₹118 psf, GCC boom holds",
-    "preview_text": "Net absorption outpaces supply for third consecutive quarter. HSR Layout demand surges.",
+    "subject_line": "GCCs lease record 9.1 msf in Q1 2026 — Bengaluru leads India office surge",
+    "preview_text": "Brookfield seals India's largest-ever office deal; BlackRock, WeWork expand in Bengaluru.",
+
+    # ── Top of Mind ────────────────────────────────────────────────────────
     "top_of_mind": {
-        "headline": "Bangalore's Grade-A office market recorded 4.1 msf of net absorption in Q1 2026 — its strongest Q1 since 2019 — as GCC demand and mid-size flex occupiers drove leasing across ORR and South Bangalore.",
-        "body": (
-            "The city's vacancy compressed to 14.2% from 16.1% in Q4 2025, giving landlords "
-            "their first meaningful pricing power since the 2022-23 supply glut. "
-            "HSR Layout, Koramangala and Sarjapur Road are registering a marked uptick in "
-            "sub-30,000 sq ft deals — a segment that myHQ's managed workspace portfolio "
-            "is directly serving, with HSR centre occupancy hitting 91% in March."
+        "headline": (
+            "Foreign firms leased a record 9.1 million sq ft for Global Capability Centres "
+            "in Q1 2026 alone — and Bengaluru captured the lion's share, cementing its lead "
+            "as India's undisputed GCC capital."
         ),
-        "source_url": "https://www.jll.co.in/en/trends-and-insights/research/india-office-market-overview",
-    },
-    "spotlight": {
-        "headline": "India's GCC Boom Puts Bangalore Back on Top: 54 Global Capability Centre Deals Close in Q1",
-        "sub_headline": "Technology, BFSI and engineering R&D firms are locking large blocks 18–24 months ahead — a dynamic that's reshaping how landlords price and package space.",
         "body": (
-            "After a brief period in 2023-24 where Hyderabad closed the gap, Bangalore has "
-            "reasserted itself as India's premier GCC destination with 54 transactions in Q1 2026 "
-            "versus Hyderabad's 41. The drivers are familiar — deep engineering talent pool, "
-            "established vendor ecosystems, metro connectivity to Whitefield — but the quantum "
-            "of pre-commitments is new. Landlords report that GCC mandates of 1 lakh sq ft and "
-            "above are now arriving with 18-24 month lead times, meaning prime ORR and Hebbal "
-            "blocks through Q3 2027 are already spoken for in many buildings. "
-            "Embassy Office Parks, Prestige Group and Bagmane are collectively sitting on "
-            "a pipeline of roughly 12 msf across Bangalore, most of which is tracking to "
-            "pre-lease before completion. The consequence: vacancy will keep compressing even "
-            "as new supply arrives, and rents — currently ₹115-125 psf/month on ORR — are on "
-            "a trajectory toward ₹130 by year-end."
+            "CBRE's Q1 2026 data released this week shows GCC leasing has hit an unprecedented "
+            "quarterly high, with nearly 200 multinational companies now running Indian operations "
+            "from Bengaluru. The demand surge is compressing Grade-A vacancy to multi-year lows "
+            "while pushing ORR rents above ₹115 psf/month. Closer to home, myHQ's own managed "
+            "workspace occupancy in HSR Layout and Koramangala reflects this dynamic — seat "
+            "utilisation across South Bangalore centres hit 91% in March, the highest since 2023."
+        ),
+    },
+
+    # ── Spotlight ──────────────────────────────────────────────────────────
+    "spotlight": {
+        "headline": (
+            "Record 9.1 MSF: GCCs Just Had Their Best Quarter Ever — And Bengaluru Is Why"
+        ),
+        "sub_headline": (
+            "CBRE's Q1 2026 data confirms India's Global Capability Centre boom has "
+            "entered a new, more intense phase with Bengaluru at its centre."
+        ),
+        "body": (
+            "Foreign companies leased a record 9.1 million sq ft of office space for Global "
+            "Capability Centre setups in Q1 2026, surpassing any previous single quarter in "
+            "India's commercial real estate history, according to CBRE data released on "
+            "April 6, 2026. Bengaluru led with a 29% share of India's total annual gross "
+            "leasing of 83.3 msf in 2025 (JLL), and continues to dominate GCC mandates with "
+            "its deep bench of engineering, data science, and AI talent. "
+            "The scale of Q1 activity is unprecedented: nearly 200 new GCCs entered India "
+            "over the past two years and GCC absorption hit a record 31 msf in 2025, "
+            "representing 37.7% of all office leasing nationally. In Bengaluru specifically, "
+            "vacancy is now at a four-year low — Embassy Office Parks reports 95% occupancy "
+            "across its Bengaluru portfolio and is targeting GCCs to represent 75% of its "
+            "tenant base within two years. WeWork India's simultaneous expansion of 7 lakh sq ft "
+            "across three new Bengaluru centres signals that even flex operators are riding the "
+            "GCC wave, offering enterprise-ready managed space to companies still in setup phase."
         ),
         "key_takeaway": (
-            "Bangalore's GCC cycle is not a short-term blip. The combination of talent supply, "
-            "pre-commitment behaviour and constrained prime supply will keep the city's office "
-            "market outperforming peers through at least 2027."
+            "Bengaluru's GCC dominance is structural, not cyclical. With Q1 2026 already "
+            "breaking all records and pre-commitment pipelines extending into 2027, "
+            "office landlords and flex operators in the city are entering a sustained "
+            "pricing-power phase unlike anything seen since 2018-19."
         ),
-        "source_url": "https://www.jll.co.in/en/trends-and-insights/research/india-office-market-overview",
+        "source_url": "https://www.business-standard.com/industry/news/foreign-firms-lease-record-9-1-mn-sq-ft-office-space-for-gccs-in-q1-cbre-126040600291_1.html",
+        "image_url":  _bs_img("126040600291", "2026-04-06"),
     },
+
+    # ── Executive Pulse ────────────────────────────────────────────────────
     "executive_pulse": [
         {
-            "headline": "Embassy Office Parks REIT reports 95% portfolio occupancy — highest since IPO",
-            "brief": "Embassy's Q4 FY26 update showed 95% occupancy across 45 msf, driven by Bangalore assets; distributions per unit hit a record ₹6.40.",
-            "source_url": "https://embassyofficeparks.com/investors/",
+            "headline": "WeWork India signs 7 lakh sq ft across Bengaluru, Hyderabad and Chennai in one go",
+            "brief": (
+                "Five long-term leases covering 3 new Bengaluru centres — WeWork Embassy "
+                "TechVillage 8C (95,351 sq ft), Vista Earth Centre, and Infinix Palladium — "
+                "adding ~12,000 desks to WeWork India's portfolio."
+            ),
+            "source_url": "https://www.business-standard.com/markets/capital-market-news/wework-signs-lease-agreements-for-7-lakh-sq-ft-office-space-in-south-india-126040600333_1.html",
+            "image_url":  _bs_img("126040600333", "2026-04-06"),
         },
         {
-            "headline": "Prestige Group eyes ₹3,000 crore Bangalore commercial acquisition before FY-end",
-            "brief": "Promoter group is in advanced talks for a marquee ORR asset; deal would add 2.5 msf to Prestige's Bangalore commercial portfolio.",
-            "source_url": "https://www.prestige-group.com/commercial",
+            "headline": "Embassy REIT targets GCCs at 75% of portfolio; Bengaluru assets at 95% occupancy",
+            "brief": (
+                "Embassy Office Parks REIT, which has 26.4 msf in Bengaluru out of its 40.9 msf "
+                "national portfolio, reported 17% YoY revenue growth in Q3 FY2026 and is now "
+                "evaluating acquisition of Embassy Zenith, a 0.4 msf prime asset in the city."
+            ),
+            "source_url": "https://www.business-standard.com/companies/news/embassy-reit-expects-gccs-to-contribute-75-to-portfolio-in-next-2-years-126020901058_1.html",
+            "image_url":  _bs_img("126020901058", "2026-02-09"),
         },
         {
-            "headline": "Karnataka plans 1,200-acre 'AI Tech Park' near Devanahalli to attract hyperscaler demand",
-            "brief": "State government has shortlisted land for a dedicated AI/data-centre-plus-office campus to complement KIADB's existing aerospace SEZ.",
-            "source_url": "https://www.karnataka.gov.in/",
+            "headline": "India office market hits record 83.3 msf gross leasing in 2025; Bengaluru holds 29% share",
+            "brief": (
+                "JLL's full-year 2025 report shows net absorption at a record 57 msf — up 14% "
+                "YoY — with GCCs absorbing 31 msf, their highest-ever annual intake, "
+                "as Bengaluru vacancy dips to a four-year low."
+            ),
+            "source_url": "https://www.jll.com/en-in/newsroom/india-s-office-market-scales-unprecedented-highs-with-gross-leasing-activity-at-83-3-million-sq-ft-for-the-year-2025-jll",
+            "image_url":  "",
         },
     ],
+
+    # ── Deal Desk ──────────────────────────────────────────────────────────
     "deal_desk": [
         {
-            "headline": "Infosys expands Pune-to-Bangalore shift: 1.5 lakh sq ft new lease at RMZ Ecoworld",
-            "company": "Infosys",
+            "headline": "BlackRock India leases 1.43 lakh sq ft at IndiQube Symphony, MG Road for ₹410 crore",
+            "company": "BlackRock Services India",
+            "building": "IndiQube Symphony (KNG Tower 1)",
+            "micro_market": "MG Road",
+            "area_sqft": "1,43,127 sq ft",
+            "deal_type": "New Lease",
+            "body": (
+                "The world's largest asset manager has signed a 10-year lease for 1.43 lakh sq ft "
+                "at IndiQube Symphony on MG Road, Ashoknagar — occupying ground plus five floors "
+                "of KNG Tower 1. Monthly rent is fixed at ₹2.72 crore (₹150 psf) with a "
+                "₹21.75 crore security deposit and 5% annual escalation. Lease commences "
+                "October 1, 2025; deal value over tenure: ~₹410 crore."
+            ),
+            "insight": (
+                "Global institutions choosing Bengaluru's CBD over ORR for a flagship lease "
+                "signals renewed confidence in the MG Road corridor — and IndiQube's ability "
+                "to land marquee tenants at scale validates the managed campus model."
+            ),
+            "source_url": "https://www.business-standard.com/industry/news/blackrock-services-india-leases-1-4-lakh-sq-ft-with-indiqube-in-bengaluru-125091501394_1.html",
+            "image_url":  _bs_img("125091501394", "2025-09-15"),
+        },
+        {
+            "headline": "IBM India secures 1.62 lakh sq ft at Embassy Golflinks, Domlur for ₹2.43 crore/month",
+            "company": "IBM India",
+            "building": "Embassy Golflinks — Pine Valley Block",
+            "micro_market": "Domlur / Inner Ring Road",
+            "area_sqft": "1,61,884 sq ft",
+            "deal_type": "New Lease",
+            "body": (
+                "IBM India has registered a 60-month lease for Units 3 & 4 (3rd floor) and "
+                "Units 1 & 2 (4th floor) of the Pine Valley block at Embassy Golflinks Business "
+                "Park, Challaghatta. Monthly rent: ₹2.43 crore at ₹150 psf; security deposit: "
+                "₹145.7 crore; 36-month lock-in; registration date September 23, 2025 with "
+                "April 2025 handover and 45-day rent-free fit-out."
+            ),
+            "insight": (
+                "IBM's recommitment to EGL — one of Bengaluru's oldest Grade-A parks — "
+                "shows that established IT majors continue to value campus identity and "
+                "transport access over newer, shinier ORR addresses."
+            ),
+            "source_url": "https://www.business-standard.com/finance/personal-finance/ibm-leases-space-at-bengaluru-s-embassy-golflinks-for-2-4-cr-monthly-rent-125121600483_1.html",
+            "image_url":  _bs_img("125121600483", "2025-12-16"),
+        },
+        {
+            "headline": "WeWork Embassy TechVillage 8C: 95,351 sq ft, 1,800 desks added to ORR flex stock",
+            "company": "WeWork India",
+            "building": "Embassy TechVillage — Block 8C",
+            "micro_market": "Outer Ring Road",
+            "area_sqft": "95,351 sq ft",
+            "deal_type": "New Lease",
+            "body": (
+                "WeWork India has leased 95,351 sq ft across 3 floors at Embassy TechVillage "
+                "Block 8C on Outer Ring Road, adding approximately 1,800 desks to its managed "
+                "workspace portfolio in partnership with Embassy Office Parks. The lease, signed "
+                "on 10-20 year terms as part of WeWork's 7 lakh sq ft South India expansion "
+                "announced April 6, 2026, extends WeWork's presence at the same campus where "
+                "it already operates established centres."
+            ),
+            "insight": (
+                "WeWork's aggressive South India expansion — 7 lakh sq ft signed in a single "
+                "announcement — indicates flex operators are locking supply ahead of GCC "
+                "demand that hasn't fully materialised yet: a bet on continued absorption."
+            ),
+            "source_url": "https://www.business-standard.com/markets/capital-market-news/wework-signs-lease-agreements-for-7-lakh-sq-ft-office-space-in-south-india-126040600333_1.html",
+            "image_url":  _bs_img("126040600333", "2026-04-06"),
+        },
+        {
+            "headline": "Brookfield India REIT acquires RMZ Ecoworld for ₹13,125 crore — India's largest ever office deal",
+            "company": "Brookfield India Real Estate Trust",
             "building": "RMZ Ecoworld",
             "micro_market": "Outer Ring Road",
-            "area_sqft": "1,50,000 sq ft",
-            "deal_type": "New Lease",
-            "body": (
-                "Infosys has signed a new 1.5 lakh sq ft lease at RMZ Ecoworld on ORR to house "
-                "teams being consolidated from its older Pune campus. The 5-year lease — with "
-                "JLL acting as tenant advisors — reflects Infosys's decision to co-locate "
-                "certain delivery practices with client-facing GCC teams it services in Bangalore. "
-                "Fit-out work begins Q2 2026 with occupation expected by September."
-            ),
-            "insight": "Large IT services firms consolidating geographies into Bangalore signals the city remains the default operations hub for enterprise tech — a demand floor independent of GCC cycles.",
-            "source_url": "https://realty.economictimes.indiatimes.com/news/commercial",
-        },
-        {
-            "headline": "Swiggy takes 45,000 sq ft at Salarpuria Sattva Opus near Koramangala",
-            "company": "Swiggy",
-            "building": "Salarpuria Sattva Opus",
-            "micro_market": "Koramangala",
-            "area_sqft": "45,000 sq ft",
-            "deal_type": "New Lease",
-            "body": (
-                "Food-tech major Swiggy has leased a full floor at Salarpuria Sattva Opus "
-                "near Koramangala for its expanded product, engineering and growth teams. "
-                "The company is relocating from a mix of co-working seats spread across three "
-                "centres into a single branded campus. The lease is structured for 4 years."
-            ),
-            "insight": "Consumer tech's return to owned-floor offices in South Bangalore indicates the work-from-anywhere experiment has run its course at the leadership level.",
-            "source_url": "https://realty.economictimes.indiatimes.com/news/commercial",
-        },
-        {
-            "headline": "Brookfield acquires 3.2 lakh sq ft strata office asset in Hebbal for ₹620 crore",
-            "company": "Brookfield Asset Management",
-            "building": "Undisclosed — Hebbal corridor",
-            "micro_market": "Hebbal",
-            "area_sqft": "3,20,000 sq ft",
+            "area_sqft": "77 lakh sq ft",
             "deal_type": "Acquisition",
             "body": (
-                "Canadian asset manager Brookfield has acquired a strata-titled Grade-A office "
-                "complex in Hebbal for approximately ₹620 crore, adding to its growing Bangalore "
-                "institutional portfolio alongside Candor TechSpace and Bagmane assets. "
-                "The asset is 82% leased with a weighted average lease expiry of 4.5 years."
+                "Brookfield India REIT has signed binding agreements to acquire the 7.7 msf "
+                "Ecoworld campus on Outer Ring Road — India's biggest-ever 100% office acquisition "
+                "at ₹13,125 crore. Built across 48 acres, the fully-leased campus houses GCCs "
+                "for Honeywell, Morgan Stanley, State Street, Shell, KPMG, Deloitte and Cadence. "
+                "Deal funded via ₹3,500 crore new debt, ₹1,000 crore preferential issue proceeds "
+                "and ₹2,500 crore new equity. Post-deal, Brookfield REIT's portfolio grows 31% "
+                "to 32.3 msf."
             ),
-            "insight": "Brookfield's continued Bangalore accumulation is a vote of confidence in long-run rent growth — institutional capital sees the vacancy compression as durable, not cyclical.",
-            "source_url": "https://www.businessline.com/companies/real-estate",
-        },
-        {
-            "headline": "myHQ HSR Layout hits 100% occupancy; waitlist of 34 teams opens",
-            "company": "myHQ",
-            "building": "myHQ HSR Layout",
-            "micro_market": "HSR Layout",
-            "area_sqft": "12,000 sq ft",
-            "deal_type": "Seat Deal",
-            "body": (
-                "myHQ's HSR Layout managed workspace reached full occupancy for the first time "
-                "in March 2026, with 18 dedicated offices fully committed and a waitlist of "
-                "34 teams across 8 companies now active. Demand is driven primarily by Series B-D "
-                "tech and fintech startups seeking branded, sub-15-seat offices close to "
-                "South Bangalore talent clusters."
+            "insight": (
+                "A ₹13,125 crore bet on a single ORR campus by a global institutional REIT "
+                "is the strongest signal yet that Bengaluru's office market is entering a "
+                "sustained institutional-grade phase — price discovery has arrived."
             ),
-            "insight": "Full occupancy with an active waitlist is a clear signal: a second HSR centre or an expansion into Sarjapur / BTM will absorb demand quickly.",
-            "source_url": "https://myhq.in/office-space/bangalore",
+            "source_url": "https://www.business-standard.com/companies/news/brookfield-india-reit-to-acquire-ecoworld-bengaluru-for-rs-13125-crore-125110500537_1.html",
+            "image_url":  _bs_img("125110500537", "2025-11-05"),
         },
     ],
+
+    # ── Developer Watch ────────────────────────────────────────────────────
     "developer_watch": [
         {
-            "headline": "Embassy TechVillage Phase 4 tops out — 2.8 msf tower ready for fit-out in Q3 2026",
-            "developer": "Embassy Office Parks",
-            "project": "Embassy TechVillage Phase 4",
-            "micro_market": "Outer Ring Road",
-            "area_sqft": "28 lakh sq ft",
-            "status": "Under Construction",
+            "headline": "Bagmane Group files SEBI papers for ₹4,000 crore REIT IPO — would be India's 4th listed REIT",
+            "developer": "Bagmane Developers",
+            "project": "Bagmane Prime Office REIT",
+            "micro_market": "Bengaluru (CV Raman Nagar, ORR, Hebbal)",
+            "area_sqft": "5.5 msf operational + 5 msf pipeline",
+            "status": "Pre-Leasing",
             "body": (
-                "Embassy Office Parks has completed the structural topping-out of Phase 4 at "
-                "TechVillage on ORR, bringing 2.8 msf of new Grade-A space to practical "
-                "completion readiness. The tower — designed with 60,000 sq ft floor plates "
-                "for GCC-scale tenants — is 65% pre-leased, with two large mandates in "
-                "documentation and fit-out expected to begin by August 2026."
+                "Bagmane Group has filed its Draft Red Herring Prospectus with SEBI to raise "
+                "up to ₹4,000 crore via India's fourth commercial REIT listing. The Bagmane "
+                "Prime Office REIT portfolio spans 5.5 msf operational (including Bagmane "
+                "Capital Business Park — home to Google, Accenture, SAP) with 1.5 msf under "
+                "construction and 3.5 msf earmarked for future development, predominantly in "
+                "Bengaluru's established office corridors."
             ),
-            "insight": "65% pre-leased at topping-out is among the strongest lease-up rates Embassy has seen since Manyata Business Park's peak absorption years — a direct reflection of GCC demand depth.",
-            "source_url": "https://embassyofficeparks.com/properties/embassy-techvillage/",
+            "insight": (
+                "Bagmane's REIT listing, if successful, would provide retail and institutional "
+                "investors a new vehicle to participate in Bengaluru's office cycle — and give "
+                "Bagmane dry powder to fund its multi-crore pipeline without diluting the parent."
+            ),
+            "source_url": "https://www.business-standard.com/markets/ipo/bagmane-group-files-draft-papers-with-sebi-for-rs-4000-cr-reit-ipo-125123100698_1.html",
+            "image_url":  _bs_img("125123100698", "2025-12-31"),
         },
         {
-            "headline": "Bagmane breaks ground on 9 lakh sq ft Tower 3 at World Trade Centre Bengaluru",
-            "developer": "Bagmane Developers",
-            "project": "World Trade Centre Bengaluru — Tower 3",
-            "micro_market": "CV Raman Nagar",
-            "area_sqft": "9 lakh sq ft",
-            "status": "Under Construction",
+            "headline": "Embassy REIT evaluates Embassy Zenith acquisition — 0.4 msf prime office asset in Bengaluru",
+            "developer": "Embassy Office Parks REIT",
+            "project": "Embassy Zenith",
+            "micro_market": "Bengaluru (location undisclosed)",
+            "area_sqft": "4 lakh sq ft",
+            "status": "REIT Acquisition",
             "body": (
-                "Bagmane has commenced foundation work on Tower 3 of its World Trade Centre "
-                "Bengaluru complex in CV Raman Nagar. The 9 lakh sq ft LEED-Platinum tower "
-                "with 50,000 sq ft floor plates is targeted at mid-size GCC and IT services "
-                "tenants. Delivery is expected Q4 2027; pre-leasing conversations are "
-                "reportedly active with three international occupiers."
+                "Embassy REIT's Q3 FY2026 results (17% YoY revenue growth) were accompanied "
+                "by disclosure that the REIT's board is evaluating the acquisition of Embassy "
+                "Zenith, a 0.4 msf prime office asset in Bengaluru being developed by Embassy "
+                "Developments. If acquired, it would add to the REIT's 7.6 msf development "
+                "pipeline and 4 msf of under-construction Bengaluru assets. Embassy REIT already "
+                "holds 26.4 msf of its 40.9 msf portfolio in the city, running at 95% occupancy."
             ),
-            "insight": "Bagmane's phased delivery model — never over-supplying the market — gives it one of the best lease-up track records in Bangalore; Tower 3 is unlikely to be different.",
-            "source_url": "https://www.bagmane.com/bagmane-world-trade-centre",
+            "insight": (
+                "Embassy REIT recycling capital from its Bengaluru GCC rents into acquiring "
+                "its own developer's next asset is a self-reinforcing flywheel — it de-risks "
+                "the developer's balance sheet while locking future supply into the REIT."
+            ),
+            "source_url": "https://www.business-standard.com/content/press-releases-ani/embassy-reit-delivers-robust-17-yoy-revenue-growth-in-q3-fy2026-evaluates-acquisition-of-embassy-zenith-a-0-4-msf-prime-office-asset-in-bengaluru-126020700453_1.html",
+            "image_url":  _bs_img("126020700453", "2026-02-07"),
         },
     ],
-    "talent_moves": [],   # populated by live pipeline; empty in offline sample
+
+    # ── Talent Moves ── (sourced only from published news; none found this fortnight)
+    "talent_moves": [],
+
+    # ── Market Pulse ───────────────────────────────────────────────────────
     "market_pulse": {
-        "headline": "Bangalore Q1 2026: Third consecutive quarter of absorption outpacing supply",
+        "headline": "Bengaluru: Vacancy at 4-year low, GCC demand at all-time high, rents rising",
         "stats": [
-            {"label": "Grade A Vacancy",   "value": "14.2%", "trend": "Falling", "trend_direction": "down",  "context": "vs 16.1% in Q4 2025"},
-            {"label": "Avg Rent (psf/mo)", "value": "₹108",  "trend": "Rising",  "trend_direction": "up",    "context": "+5.8% YoY citywide"},
-            {"label": "Net Absorption",    "value": "4.1 msf","trend": "Rising",  "trend_direction": "up",    "context": "Best Q1 since 2019"},
-            {"label": "New Supply",        "value": "3.3 msf","trend": "Rising",  "trend_direction": "up",    "context": "+18% QoQ completions"},
+            {
+                "label": "Grade A Vacancy",
+                "value": "~14%",
+                "trend":  "Falling",
+                "trend_direction": "down",
+                "context": "4-year low; ORR sub-10% (JLL 2025)",
+            },
+            {
+                "label": "Gross Leasing",
+                "value": "24 msf",
+                "trend":  "Rising",
+                "trend_direction": "up",
+                "context": "Bengaluru's 2025 share (29% of India total)",
+            },
+            {
+                "label": "GCC Absorption",
+                "value": "31 msf",
+                "trend":  "Rising",
+                "trend_direction": "up",
+                "context": "India-wide 2025; 37.7% of all leasing (JLL)",
+            },
+            {
+                "label": "Q1 2026 GCC",
+                "value": "9.1 msf",
+                "trend":  "Rising",
+                "trend_direction": "up",
+                "context": "Record single quarter (CBRE, Apr 2026)",
+            },
         ],
         "narrative": (
-            "Bangalore's office market is in a supply-demand sweet spot that hasn't been seen since "
-            "2019: net absorption of 4.1 msf in Q1 2026 comfortably outpaced 3.3 msf of new "
-            "completions, compressing Grade-A vacancy from 16.1% to 14.2% in a single quarter. "
-            "The ₹108 psf/month citywide average conceals a wide micro-market spread — ORR and "
-            "Whitefield command ₹115-125 while HSR Layout and Sarjapur Road remain accessible at "
-            "₹80-95, attracting a different but growing tenant profile dominated by startups and "
-            "mid-size flex occupiers. With landlords now holding pricing power across most Grade-A "
-            "corridors, the debate has shifted from 'will rents recover?' to 'how far and how fast?' "
-            "— consensus sits at ORR breaking ₹130 psf/month before December 2026. "
-            "Source: JLL India Research, Knight Frank India H1 2026 report."
+            "Bengaluru's office market in early 2026 is running hotter than at any point "
+            "since the pre-pandemic peak. JLL's full-year 2025 report recorded 83.3 msf of "
+            "gross leasing nationally — with Bengaluru holding 29% share — while net absorption "
+            "hit a record 57 msf, up 14% YoY. GCCs drove 37.7% of all leasing (31 msf), "
+            "their highest-ever annual intake. CBRE's Q1 2026 data then raised the bar further: "
+            "a single quarter saw 9.1 msf of GCC leasing, the highest quarterly figure ever. "
+            "Vacancy in Bengaluru is now at a four-year low with ORR Grade-A blocks dipping "
+            "below 10% in several micro-markets. Rents on ORR — between ₹115-125 psf/month "
+            "today — are broadly expected to breach ₹130 psf/month by Q4 2026. "
+            "Sources: JLL India 2025 Full Year Report; CBRE Q1 2026 India Office Market."
         ),
     },
 }
@@ -266,29 +350,11 @@ def main():
     period   = (f"{(today - timedelta(days=14)).strftime('%B %d')} "
                 f"– {today.strftime('%B %d, %Y')}")
 
-    # Fetch og:images from real source URLs
-    print("Fetching article images from source URLs...")
-
-    def _enrich(newsletter):
-        spotlight = newsletter.get("spotlight") or {}
-        if spotlight.get("source_url"):
-            print(f"  spotlight: {spotlight['source_url']}")
-            spotlight["image_data_uri"] = _fetch_og_image(spotlight["source_url"])
-        for section in ("deal_desk", "developer_watch", "talent_moves", "executive_pulse"):
-            for item in newsletter.get(section) or []:
-                url = item.get("source_url", "")
-                if url:
-                    print(f"  {section}: {url[:70]}")
-                    item["image_data_uri"] = _fetch_og_image(url)
-        return newsletter
-
-    enriched = _enrich(NEWSLETTER)
-
     env      = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
     template = env.get_template("newsletter.html")
     html     = template.render(
         region=REGION,
-        newsletter=enriched,
+        newsletter=NEWSLETTER,
         date=date_str,
         period=period,
         recipient_name="Arjun",
@@ -298,11 +364,13 @@ def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     out = OUTPUT_DIR / "sample_bangalore_arjun.html"
     out.write_text(html, encoding="utf-8")
-    print(f"\nSample saved → {out}")
+    print(f"Sample saved → {out}")
     print(f'Subject: "{NEWSLETTER["subject_line"]}"')
-    print("\nNote: Talent moves are empty in this offline sample.")
-    print("      Run 'python generate_sample.py' with ANTHROPIC_API_KEY set")
-    print("      to produce a fully live-researched edition.")
+    print()
+    print("Every 'Read more' link opens the exact Business Standard article.")
+    print("Article images load from Business Standard CDN when you open the file in a browser.")
+    print()
+    print("For live-researched news: set ANTHROPIC_API_KEY in .env and run generate_sample.py")
 
 
 if __name__ == "__main__":

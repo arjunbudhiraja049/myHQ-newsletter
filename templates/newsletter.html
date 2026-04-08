@@ -152,6 +152,24 @@
       width: 100%;
       overflow: hidden;
       background: #111;
+      position: relative;
+    }
+    /* Minimal dark placeholder — shown when no real image is available */
+    .story-img-empty {
+      width: 100%;
+      background: #181818;
+      border-top: 3px solid #2B2FE6;
+      display: flex;
+      align-items: flex-end;
+      padding: 14px 16px;
+      box-sizing: border-box;
+    }
+    .story-img-empty-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
     }
 
     /* Image overlay pattern (makes it look editorial) */
@@ -543,14 +561,15 @@
     {% if newsletter.spotlight %}
     <div class="lead-story">
 
-      {% if newsletter.spotlight.image_data_uri %}
+      {% set spot_img = newsletter.spotlight.image_data_uri or newsletter.spotlight.image_url %}
+      {% if spot_img %}
       <div class="story-img-wrap" style="height:260px;">
-        <img src="{{ newsletter.spotlight.image_data_uri }}" alt="{{ newsletter.spotlight.headline }}"
-             class="story-img-real" style="height:260px;">
+        <img src="{{ spot_img }}" alt="" class="story-img-real" style="height:260px;"
+             onerror="this.remove()">
       </div>
       {% else %}
-      <div class="story-image img-spotlight">
-        <span class="story-image-label">THE SPOTLIGHT · {{ region.display_name }}</span>
+      <div class="story-img-empty" style="height:260px;">
+        <span class="story-img-empty-label">THE SPOTLIGHT · {{ region.display_name }}</span>
       </div>
       {% endif %}
 
@@ -588,14 +607,15 @@
     <div class="two-col" style="margin-bottom:0;">
       {% for item in newsletter.executive_pulse[:2] %}
       <div class="col-story">
-        {% if item.image_data_uri %}
+        {% set ep_img = item.image_data_uri or item.image_url %}
+        {% if ep_img %}
         <div class="story-img-wrap" style="height:140px;margin-bottom:12px;">
-          <img src="{{ item.image_data_uri }}" alt="{{ item.headline }}"
-               class="story-img-real" style="height:140px;">
+          <img src="{{ ep_img }}" alt="" class="story-img-real" style="height:140px;"
+               onerror="this.remove()">
         </div>
         {% else %}
-        <div class="story-image {% if loop.index == 1 %}img-deal{% else %}img-developer{% endif %}">
-          <span class="story-image-label">QUICK READ</span>
+        <div class="story-img-empty" style="height:140px;margin-bottom:12px;">
+          <span class="story-img-empty-label">QUICK READ</span>
         </div>
         {% endif %}
         <div class="section-label" style="margin-top:10px;">
@@ -641,14 +661,15 @@
     <div class="two-col">
       {% for deal in newsletter.deal_desk[:2] %}
       <div class="col-story">
-        {% if deal.image_data_uri %}
+        {% set deal_img = deal.image_data_uri or deal.image_url %}
+        {% if deal_img %}
         <div class="story-img-wrap" style="height:140px;margin-bottom:12px;">
-          <img src="{{ deal.image_data_uri }}" alt="{{ deal.headline }}"
-               class="story-img-real" style="height:140px;">
+          <img src="{{ deal_img }}" alt="" class="story-img-real" style="height:140px;"
+               onerror="this.remove()">
         </div>
         {% else %}
-        <div class="story-image img-deal">
-          <span class="story-image-label">{{ (deal.deal_type or 'Deal') | upper }}</span>
+        <div class="story-img-empty" style="height:140px;margin-bottom:12px;">
+          <span class="story-img-empty-label">{{ (deal.deal_type or 'DEAL') | upper }}</span>
         </div>
         {% endif %}
         <div class="section-label" style="margin-top:10px;">
