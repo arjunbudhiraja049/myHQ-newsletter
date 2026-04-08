@@ -19,6 +19,7 @@ Output: HTML file(s) saved to ./output/
 """
 
 import argparse
+import base64
 import json
 import os
 import sys
@@ -58,6 +59,14 @@ def get_region(region_id: str, regions: list[dict]) -> dict:
     sys.exit(1)
 
 
+def _logo_data_uri() -> str:
+    logo_path = TEMPLATE_DIR / "assets" / "myhq_logo.png"
+    if logo_path.exists():
+        data = base64.b64encode(logo_path.read_bytes()).decode()
+        return f"data:image/png;base64,{data}"
+    return ""
+
+
 def render_html(region: dict, newsletter: dict, date_str: str, period: str,
                 recipient_name: str = "Reader") -> str:
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
@@ -68,6 +77,7 @@ def render_html(region: dict, newsletter: dict, date_str: str, period: str,
         date=date_str,
         period=period,
         recipient_name=recipient_name,
+        logo_data_uri=_logo_data_uri(),
     )
 
 

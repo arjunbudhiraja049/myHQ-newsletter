@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>myHQ Office Pulse — Bangalore</title>
+  <style>
+    /* ── Reset ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #F0EFEB;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      color: #1A1A1A;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Outer wrapper ── */
+    .email-wrap {
+      max-width: 700px;
+      margin: 32px auto;
+      background: #FFFFFF;
+      border: 1px solid #E0DED9;
+    }
+
+    /* ── Header ── */
+    .header {
+      padding: 20px 28px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid #1A1A1A;
+    }
+    .header-logo {
+      flex: 0 0 auto;
+    }
+    .header-delivery {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+      padding: 0 16px;
+      border-left: 1px solid #E0DED9;
+      border-right: 1px solid #E0DED9;
+    }
+    .header-delivery em { color: #2B2FE6; font-style: normal; font-weight: 600; }
+    .header-right {
+      flex: 0 0 auto;
+      text-align: right;
+    }
+    .header-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1A1A1A;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .view-browser {
+      display: block;
+      font-size: 11px;
+      color: #2B2FE6;
+      text-decoration: underline;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    /* ── Byline bar ── */
+    .byline-bar {
+      padding: 12px 28px;
+      border-bottom: 1px solid #E0DED9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .byline-left {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #1A1A1A;
+    }
+    .byline-left span { color: #2B2FE6; }
+    .byline-sub {
+      font-size: 11px;
+      color: #888;
+      font-style: italic;
+      margin-top: 1px;
+    }
+    .byline-region-pill {
+      background: #2B2FE6;
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── Body content ── */
+    .body-content {
+      padding: 32px 28px;
+    }
+
+    /* Greeting */
+    .greeting {
+      font-size: 16px;
+      color: #1A1A1A;
+      margin-bottom: 20px;
+    }
+
+    /* Top of mind prose */
+    .tom-prose {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 28px;
+    }
+    .tom-prose strong { color: #1A1A1A; }
+
+    /* ── Story image block ── */
+    .story-image {
+      width: 100%;
+      height: 260px;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .story-image-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      background: rgba(0,0,0,0.35);
+      padding: 3px 10px;
+      border-radius: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* gradient backgrounds per category */
+    .img-spotlight   { background: linear-gradient(145deg, #0D0D2B 0%, #2B2FE6 60%, #4F5FF7 100%); }
+    .img-deal        { background: linear-gradient(145deg, #1C0A00 0%, #C85000 60%, #FF7A1A 100%); }
+    .img-developer   { background: linear-gradient(145deg, #002B1C 0%, #0A8A5A 60%, #1DD4A0 100%); }
+    .img-talent      { background: linear-gradient(145deg, #1A0030 0%, #6B24C0 60%, #A259F7 100%); }
+    .img-market      { background: linear-gradient(145deg, #001030 0%, #1255CC 60%, #4F8AFF 100%); }
+
+    /* Image overlay pattern (makes it look editorial) */
+    .story-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 3px,
+          rgba(255,255,255,0.015) 3px,
+          rgba(255,255,255,0.015) 4px
+        );
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #2B2FE6;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label .read-time {
+      color: #AAA;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Lead story (Spotlight) ── */
+    .lead-story { margin-bottom: 32px; }
+    .lead-headline {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #1A1A1A;
+      margin: 14px 0 16px;
+    }
+    .lead-body {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #333;
+    }
+    .lead-body p { margin-bottom: 14px; }
+    .lead-body p:last-child { margin-bottom: 0; }
+
+    /* Key takeaway box */
+    .takeaway-box {
+      border: 1px solid #E0DED9;
+      border-left: 3px solid #2B2FE6;
+      padding: 14px 16px;
+      margin: 20px 0;
+      background: #FAFAFA;
+    }
+    .takeaway-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #2B2FE6;
+      margin-bottom: 6px;
+    }
+    .takeaway-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* Read more link */
+    .read-more {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2B2FE6;
+      text-decoration: none;
+      border-bottom: 1px solid #2B2FE6;
+      padding-bottom: 1px;
+    }
+    .read-more:hover { opacity: 0.8; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #E0DED9;
+      margin: 28px 0;
+    }
+    .divider-thick {
+      border: none;
+      border-top: 2px solid #1A1A1A;
+      margin: 28px 0;
+    }
+
+    /* ── Two-column story grid ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 540px) {
+      .two-col { grid-template-columns: 1fr; }
+      .header { flex-direction: column; text-align: center; }
+      .header-delivery { border: none; padding: 8px 0; }
+      .header-right { text-align: center; }
+      .view-browser { text-align: center; }
+    }
+
+    .col-story .story-image {
+      height: 140px;
+      margin-bottom: 12px;
+    }
+    .col-story .section-label { margin-bottom: 6px; }
+    .col-story .story-headline {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+    }
+    .col-story .story-summary {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #555;
+    }
+
+    /* ── Stacked story list (no image) ── */
+    .story-list-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #F0EFEB;
+    }
+    .story-list > .story-list-item:first-child { padding-top: 0; }
+    .story-list > .story-list-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .story-list-headline {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+    }
+    .story-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .story-meta-tag {
+      font-size: 11px;
+      background: #F0EFEB;
+      color: #555;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    .story-meta-tag.highlight {
+      background: #EEF0FD;
+      color: #2B2FE6;
+    }
+    .story-summary {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .story-insight {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.55;
+      font-style: italic;
+      padding-left: 12px;
+      border-left: 2px solid #E0DED9;
+      margin-top: 8px;
+    }
+
+    /* ── Talent Moves ── */
+    .talent-row {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #F0EFEB;
+      align-items: flex-start;
+    }
+    .talent-list > .talent-row:first-child { padding-top: 0; }
+    .talent-list > .talent-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .talent-initial {
+      width: 38px;
+      height: 38px;
+      background: #2B2FE6;
+      color: #FFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+      font-family: Arial Black, Arial, sans-serif;
+    }
+    .talent-info { flex: 1; }
+    .talent-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 2px;
+    }
+    .talent-transition {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .talent-transition .arrow { color: #2B2FE6; font-weight: 700; }
+    .talent-brief {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #444;
+    }
+    .talent-matters {
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* ── Market Pulse stats ── */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: #E0DED9;
+      border: 1px solid #E0DED9;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .stat-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-cell {
+      background: #FFFFFF;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .stat-cell-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #AAA;
+      margin-bottom: 6px;
+    }
+    .stat-cell-value {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1A1A1A;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-cell-trend {
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .stat-cell-trend.up { color: #0CA678; }
+    .stat-cell-trend.down { color: #E03131; }
+    .stat-cell-trend.flat { color: #868E96; }
+    .stat-cell-context {
+      font-size: 10px;
+      color: #AAA;
+      margin-top: 2px;
+    }
+    .market-narrative {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #444;
+    }
+
+    /* ── Section heading ── */
+    .section-heading {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1A1A1A;
+      letter-spacing: 0.5px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #1A1A1A;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      background: #1A1A1A;
+      padding: 24px 28px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-size: 14px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+      font-family: Arial Black, Arial, sans-serif;
+      margin-bottom: 8px;
+    }
+    .footer-logo span { color: #6B71FF; }
+    .footer-tagline {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 14px;
+    }
+    .footer-links {
+      font-size: 11px;
+      color: #555;
+    }
+    .footer-links a {
+      color: #6B71FF;
+      text-decoration: none;
+    }
+    .footer-links a:hover { text-decoration: underline; }
+    .footer-disclaimer {
+      margin-top: 12px;
+      font-size: 10px;
+      color: #444;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="email-wrap">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="header">
+
+    <!-- Logo -->
+    <div class="header-logo">
+      <a href="https://myhq.in" style="text-decoration:none;display:inline-block;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAACXBIWXMAAAsSAAALEgHS3X78AAAAAXNSR0IArs4c6QAAIABJREFUeF7tnQ14FdW1v5cFpYJEg4JBoijRqNEgUShREDQICgWBCxX/0OoFP6lWUev3R1VUBD+KrS1aLVQtXLFQglARKEGQKAgaSioKNhQ0SBQExSaKjfX/rNHQEMg5e+bMnDNz9rufx4fem733rP2uncxv9sda+x3V4YVvhAIBCEAAAhCAgFUE9kMAWOVvBgsBCEAAAhBwCCAAmAgQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIAABCAAAQsJIAAsdDpDhgAEIAABCCAAmAMQgAAEIAABCwkgACx0OkOGAAQgAAEIIACYAxCAAAQgAAELCSAALHQ6Q4YABCAAAQggAJgDEIg4gWbNmkjr1t93/muVeYBkZBwgGS33l6ZNvyfNmzdx/q0rtbX/kZqar6W6+t+y66v/yPYdu2Tnzn9LVVWNbN36pdTWfhNxGpgPAQiYEkAAmJKiHgRSSEBf8jk5LeX43IMlp0NL539nt2shR2a3kMzMA3yzTEXAlqovpGLDTtm0qVrWrf9MKio+d/5vxIFvmOkIAqEggAAIhRswAgL/JdC06X6Sm3uwdDntMOmYnyn5+a3k2JyW0qTJfinDVFNTK/+o+FzKVn8iZWXbnX83bvpXyuzhwRCAQOIEEACJM6QHCCRMQL/su3drI926He68+DMy9k+4z6A7qKr6QpaVfiTLV2yVV5ZWOVsIFAhAIDoEEADR8RWWphEB/crvdsbhclbPLOlzTjvJzm4e+dGVl++Q+Qs3y6LFW2Tt2k8jPx4GAIF0J4AASHcPM75QESgoOFR+9D9HS7++2b7u3YdqkCLO9sCMmRtl1uz3pbKyOmzmYQ8EICAiCACmAQQCJqCn8y+84Bj50ZCjpX37gwJ+Wvi6X7Vqmzz/wj/lxbkfyK5dX4fPQCyCgKUEEACWOp5hB0+gsLC1XHhBBzm//5EpPcAX/EjNnqDXDZ9/YYM881wFqwJmyKgFgUAJIAACxUvnthHQvf0B/Y+Si39yrBR0amXb8I3Gq6sAS5Z+JL/81ducFTAiRiUIBEMAARAMV3q1jIC++AcPbC8/u+rEpC7z79r1H9lSVSN6Il+D+uhJfP3S1v/0RavX9xqW5s2bisYV0JsGrTKbOf9mZR0obVp/X7KymkuzZv8NHBS0Gxcs/BAhEDRk+odAIwQQAEwNCCRIYPCg9nLdNXmBvvj1RV/+9+3y9tpPncA869ZroJ7PnaA9fpe2WQdK+/YadCjDCTjUMb+V5OZmSIvmTf1+1O7+EAKBoaVjCDRKAAHA5ICARwK6x3/LjR0DWerfuu1LWb58q3PHfuWqbSmPxKcrHDkdMqRL58Okc+fDnJgFrQ/7vkdyjTfTmwMPPlROTAHfydIhBPYmgABgVkDAJYG2Wc3l9ls7yoD+R7ps2Xj1r7/+xnnRLyrZIkuWVjkheMNe8vIOkbN6ZElRUVs5tdOhvh101K2Lhx99W5557h/cGgj7JMC+SBNAAETafRifTAL6FTxqZK6z3K/76IkWfem/sqRKXnq5UhYs3Ozs20e16FmCPr2PkKFDj3YiGfpRdJvjrrvfclZBKBCAgP8EEAD+M6XHNCSgAXweGHuq5J14SMKj0yA5U6dtkFmzN6XlUnd2dgsZOuRoJ/aBnidItGgMgfvH/S3SAilRBrSHQBAEEABBUKXPtCGgX/0339hRLhl5XEJL3Pq1/9K8SvnjtAprvmiVXdHZR8jFFx0r3c9ok9Cc0FsON926ytkeoUAAAv4QQAD4w5Fe0pCAnoCf+EhXJyOf16L72foFO3nKe1Znz9PzAtddc5KzTZBI0ZWTe+5bzdmARCDSFgLfEUAAMBUgsA8CGrb3/rGneb4Try9+fVn99sl303KZ3+uk0ayHY67Nk37nZXvtQio2fC6jr3o9EgclPQ+ShhBIAgEEQBIg84joENAAOePHdZbBA4/yZLQu9c8q3sRVtjj0El0RUIF1251vOQmHKBCAgDcCCABv3GiVhgT08NpTT5zh+aDfstc+dk6ta6AeihmB7t0Od65Uej1cqVcF7x+3hi0BM9zUgsAeBBAATAgIiIi+iB5/rNBTil6Nxqcvfo1mR3FPQFdd9MbA7bee4mnLZVnpx/Kza5c7oZApEICAOQEEgDkraqYpAa/7/brc//sp78mvf7OWK2o+zA29MnjXnZ08nQ+o3FwjI36yxOqDlj64gC4sI4AAsMzhDHdPAtdde5KMuSbPNRZd5r/h5pVSVvaJ67Y0iE1AsymOvbvA9WrMjh1fydXXLpdlpR+BGAIQMCCAADCARJX0I6B31G+/5RQZNfI414ObOq1C7rnvb+w7uyZn3kBXAx6e8AMn54CboocDL7vyNeIFuIFGXWsJIACsdb29A9eX/68nFkq/vu6uommo3jE3rHDi9VOSQ+DyS3Pl59fnuzoboCJgzPVvOCGWKRCAQOMEEADMDqsI6IGzSY+fLr2K2road9nqT5y750Gk33VliIWVNQPhxEd+IHpLw7To+Yyrr1mOCDAFRj0rCSAArHS7nYPWL//fTerm+uXPVbPUz5fWrb/vRGV0syWACEi937Ag3AQQAOH2D9b5RMDLsr++QO4Zu9pJS0tJPQFdvfn59SeLbguYFkSAKSnq2UgAAWCj1y0cs94xd/PiqKmpdQ6TReVEeYsWTaV9+4Oc7Htts5pLRsb+kpnZTPT/36zZ96TZAU0cr+/66muprf3Guba4Y8cuZ0tj69YvZUtVjWjCnerq2tDPDvXjLTd1NE7OxMHA0LsUA1NEAAGQIvA8NnkE3F7105fixSNfDWWseX2xd8xvJcfnZkhu7sFybE5LyemQ4frKXGP09SqdigFNWVxZWSObNv1L/lHxuWx6/3PZsuWL5DktzpN69siSp57oZnw4UEXAiIuWyspV20IzBgyBQKoJIABS7QGeHygBDfLz8IQuxs+o3Fwtw4YvkcrKauM2QVY8uv1BoofgCru2loJOh4pmKExVUXGwbv1nsvadT+Wtsk9k1aptKT0UqdEbNXRz8+ZNjZDoSsegoSWh8a2R0VSCQIAEEAABwqXr1BLQF8Tkp7obfyVqljmNJpfKk/56VqFnj7bOYbeis9uKCoAwF9020G2S5Su2yitLq5Ke+VDFka4EZGYeYIRJVzYGDPorkRuNaFEp3QkgANLdw5aOT6+MzS0+x/jFoC//YcNfSfoLTN1T99LXDIS6tK3L/FEtZau3y6KSD2XR4i2ydu2nSRmGropMn3qW6E0Bk6K5Ay4etdQ5C0GBgM0EEAA2ez9Nx66nxYtnFhlnmEvVsn/H/Ey58IIOMqD/kZF+6Tc2jfRre87cD5yUvfq/gyy6EvDslDONtwN+/Zt35OFH/x6kSfQNgdATQACE3kUY6JbAIxO6yNAhRxs1S/bLX7/2Bw9sLxf/5FjJz880sjEdKunKwKziTTJr9qbAlt/dbvnoLY8FCzenA17GAAFPBBAAnrDRKKwE3Bz606t+/Qf9VTSxT9BFl/UvGZkro/73uLT82jflp6fxdVXgj/+3IZBESr2KjnAOBjZpsl9ck/QqZN8BCzkUGJcUFdKVAAIgXT1r4bj0wNyCeecaHfrTF9Goy0oDv+fPi7/xiai3CSZPeU/+NHOjr7NVEzz94o5ORn1qiOehwxZzHsCIFpXSjQACIN08aul43O7733bnW6JZ/YIqyX7xa8S7j7d+6QTz0Xv8euVNv3D1v9qvv5HPd361x1APaNZElNnBTsCgA5xVidatNYjQgZKVdaC0MLxa5we/0Ve/Li/N8zdxz713FzjbLCZl0pPr5MEJa0yqUgcCaUUAAZBW7rR3MGOuPUmuuybPCMDv//Ce3Dt2tVFdt5V0j3/okGPk9ls6BrbUX7m5RtaUb3dO2a9bv1PWr//Mubqoqxp+FRUC7du3dAIOHZ97sOR3zJSTTjzEaGndrQ333rdafj/lPbfNYtZXPzwzuYdR7gAVT0OGLQ5kS8LXQdEZBHwmgADwGSjdJZ9AXt4hUjyjl9HSv95Xv2jkq76+LOtGXFjYWu79xanOS9PPoifoS0s/ktdXbHXu2+vXfSqKrhjknXiI6Di7n9FGCgoO9WWlIAgBoHz0WuCc4nOcVY14Ra+B9u2/MJB5Ee/Z/BwCqSKAAEgVeZ7rCwE3S/9BRYJrldlMbr+1o/HNA5OBrynf4RyW01PqQV+hM7FnX3WUvV6/09gF/c7Lluzs5p66CkoAqDFq3/RpZxmtXPzu6fVy/7i/eRoDjSAQRQIIgCh6DZt3E7j80uOdl69J0UN/GqTGz6K3Du66o5Mvy/16G+H5F/7p5LAPSyhiN6w0VPG5vY+QAf2PciUGghQAav/oK0+QW27MjzsU3Qro3Xe+L7dCBg9q75ylmPTEu3GfSwUIpIoAAiBV5HluwgQ0692Skr5GS/964E8P/vlV9Nn333eq9Dq7bUJd1l2L05TD+tWfLkW/vC+84BhHDGg2wlglaAGg5wGen3qWsxoQr2iyIL0V4LVoVMIHxp7m5G7QbYWi3i977Yp2EAicAAIgcMQ8ICgCjz9W6ETRi1c02E9R7/m+7e/68dWv2xF6F37ylPWBBcaJxyUZP9freHotL5UCQJ+toaEXzutjFClwzA1vOEGL3BS9RXHdNSfJxRcdu3u7QeNMnJg/y0031IVAUgkgAJKKm4f5RUAPoBXPKDLqTmP86+G5RIvGGbj/vtOcA3Bei+7naxja4tmbrLh7bpKKOegVgDpf6cv53l8UxHWdXqXUL/fqmtq4dfUchAqcn15xwj63gfI6zpLq6vj9xH0QFSAQAAEEQABQ6TJ4AvPm9jaK9e/X0n9h1zZOrPl4y9mNjVy/+H/5q7Uy/YUNVrz46ziESQCoTTOmn220FTDxV2vll4+93ehErgvp/LOrTpT2MTI29um7wEmhTIFAGAkgAMLoFWyKSaBP73ZOuNd4RV+63Xq+5MvS/+23niKXX5ob75F7/Vz3+H/75Lq0X+pvDEzYBIDu0S+cd27cWwEaQKmoz8t7XbnUL37NM3HFpbkxX/x1PC4a9aosWVLlet7QAALJIIAASAZlnuEbATfX/n527XJ5ce4Hvjxb/+hrkiE3RVPiasChsF7jczMWr3XDJgB0HKZiTsMU33PftwGjWrVq5kQWdJvL4YabVjrZECkQCCMBBEAYvYJNjRIwTfajMd4HDSnxjaRGw1swr49RfxqV7/Y735RFJVuM6qdzpTAKAD2wt7SknxMCOVbRa4EPTigXDTR1fv8j464a7KsvTTmsZz4oEAgjAQRAGL2CTY0SMN371yxvGirXr6J7vuVlg+KeItfDhpddWZrWJ/vdMA2jAFD7LxzWQcY/cJqboXiqO/X/Nshtd7zpqS2NIBA0AQRA0ITp3zcCpnv/Gkhn9FWv+/bcuo6mPtcz7g2A+8etkd89vc73Z0e1QxMBoMGPbr51VVKHqIJu0YLzRG92BFl0G2jUpcuCfAR9Q8AzAQSAZ3Q0TDYBjeveMT8z5mP10J1+/WtUPb/Lz68/WfTUd6ySipeZ3+P0sz8TAaDP08iHy1772EnPHHS+A3355+YeLOMf6Bx3PiXKQoM7DRj010S7oT0EAiGAAAgEK536TUDDzBbPjH/vXw9c6cGrIEq/vtky6fHTY3at2fn69J0fxOMj2aepAGg4uMrKGlnz9+2yfv1O5xqdHqTU+/nbt+8y5tCiRVPJbtdCstoeKMd2aOm89I/NaSn5J7fyfJ3T+OHfVdyxY5d06vyi22bUh0BSCCAAkoKZhyRK4Kknukmf3kek7OtfH6xZ5ZaX9o9pgx4c0+hvfqbmTZRdKtt7FQCN2bxr139EX6p6TU8D9dTn3Lx5U9Gve03OlJnZLGkv+Xh8c/P+zHyIB4mfp4QAAiAl2HmoGwKa1rV0yQ/j/kHX7HlXX7vcTdeu664o7e8keYlVho14RZYvTzzyoGvjQtjAbwEQwiHGNUljUUQxuVPcgVEh8gQQAJF3YfoP4KdXniA3G2Rz8/vk/77ITvrN6U7q21hl/EPl8luywDmI0lUA1KVr1vDC2e1ip0EeNLREyso+Sf9fVEYYOQIIgMi5zD6DNeNfvNPaS5ZWyUUjXw0cjh4C1MOAsUpQtxACH1wAD0gnAaDbDrNmb3IC+9Rlbpz8dPe4GSFHX/26vDSvMgC6dAmBxAggABLjR+uACZge/rv8ytdk/sLNAVsj0r3b4TL12R4xn6OBgAq7zQ3clig8IOoCQM906M2EWcXvy5y/vL9XHod77y5wIgTGKnfdXSaa7pkCgbARQACEzSPYswcBkz+wejq8W8+/JCXJjh4wK1t1flwvse/7LaKoCoC6Jf45c98XFXSNFZPtqUlPvutEFKRAIGwEEABh8wj27CagJ7pXLT8/bshWDbWqIVeTVUoWnic5HVrGfBzLvtESAHqjQA9uLvjrZid5T6yXfn3Hm4SmnjFzk9xw0xvJmp48BwLGBBAAxqiomGwCJsvtalOyv7YnPtpVBg88KiaOSU+ukwcnrEk2stA9z2QF4MGHyp2sexrkqWN+KyfNs9e0y6YAtu/4SsrLt8vKVducwEOaO6K29hvT5rvr9eyZJc9OPjNmu2SdT3FtPA2sJ4AAsH4KhBeASda2stXbZdCQRUkdhO756tZErLLyzW0y9ILFSbUrjA8zEQCXj35N5i/47/kNzfioIkAFgabv1QOg+l9WVnPXwkCFReXmGieQUEWFBhXaKWvf+dS3a3kmSaIIDhXGmYlNSgABwDwILQG9+5+dHfuKlaZr1bStySxdOh8mM6afHfORGqAmr+MsT1+VyRxL0M/yIgBi2aQxITSbX0bGAaJC4eCM/XdX/3LX16KBgnbu/MpZUdBT+0EHZNJog2vXDI6JkWiAQc8y+vdKAAHglRztAiWQk5MhJQvOjfsMPW1vul8btzPDCvriead8cNz0sH36LnDC2Npc/BYAYWSpc0GjEMYqRAMMo+ewCQHAHAglgUtGHid33dEppm2pWP6vM6h4Zi8p6NQqpn233fmWTJ1WEUq+yTLKBgFgcii0Z9E8ZxuCAoEwEUAAhMkb2LKbgEmAFT35rzcAUlFMricGmZgoFWP28kwbBIBJmuihwxY7Bw4pEAgTAQRAmLyBLQ4Bvf5XtnKgs9cbq2ia1bqIbMlGN3TI0fLIhC4xH8vhL7M4AA0PASbbl4k+T+eBzodYhWuhiVKmfRAEEABBUKXPhAjk5R0i8+b0jtmHHvDKLyhO6DmJNDY5o6BR5NTG6uraRB4V6bY2rADcclO+jL7ihJh+IhpgpKdx2hqPAEhb10Z3YCbX7MIQb3/1qoFxgxSNuGipE0rW1mKDADCZr0QDtPU3INzjRgCE2z9WWmeypJqK638NnfHslDOlZ4+smD5K5TmFMEweGwRAn97t5KknzoiJm2iAYZiN2NCQAAKAORE6AgvmnSvH52bEtGvQkBInelsqC5kB49O3QQAUFBwqxTOKYsIgGmD8uUKN5BNAACSfOU+MQUADq5SXDYp5xz4sQXZMQhVrQJrOhXOs9bkNAqBt1oGyvLR/TB9zINTaX4FQDxwBEGr32Gechn+dU3xOzIHryX+9AZDqYiJW1MZk5ypINZf6z7dBAOitlfVrh8QUrUQDDNOsxJY6AggA5kKoCEQtu5rJdoXNV8BsEAD6C7Rq+QDRMMWxCtEAQ/WnBmPIBcAcCBsBkxfG/ePWyO+eXhcK000OLNqcGdDEn1GPA6ATcc7sc6TjyZkx56TNK0Gh+GXFiL0IsALApAgVgYmP/kAGD2wf06ZRl5XKopIPQ2H3j4fnyP1jT41pi82ZAW0RACaRKwcNLZGystQeXA3FLw1GhIYAAiA0rsAQJWASYz9McdVNghaF5dBiKmaYLQLggbGnyYjhHWIitnkrKBVzj2fGJ4AAiM+IGkkksKK0v2RlHRjziTnHzwhNml09ALZ2zf/EzVNva2ZAWwSAyTiJBpjEPyQ8yogAAsAIE5WSRWDD+qExT1Nr6l9NARymMuOFs6XLaYfFNMnWzIAmL8Z0OANw4QUdZPy402LOAaIBhum3FluUAAKAeRAaAnqKWk9Txypr3/lU+vZfGBqb1RCTzIDPv/BPufnWVaGyOxnG2CIAevbMkmcnnxkT6azZ78uY61ckAzvPgIARAQSAESYqJYOAyX56GCOqDR7UXiY+8oOYiGwNBGOLADg+92BZMK9PzDmwfMVWGTb8lWT8KvEMCBgRQAAYYaJSMgiYRNab8eeNcsONK5NhjvEzTDMDnpg/S/RAoE3FFgHQqlUzKVt5fkzXbtr0L+lRNM8m9zPWkBNAAITcQTaZZ/IlPfkP78k9Y1eHCoseBCxbOVAyMvaPadfQYYtl5aptobI9aGNsEQDKUaMBNmv2vUaRqvjTYEAUCISFAAIgLJ7ADrlk5HFy1x2dYpKY+Ku18svH3g4dranP9ZTuZ7SJadf4h8rlt0+8GzrbgzTIJgFQuvSHkt2ueUycBV1elO3bdwWJnL4hYEwAAWCMiopBE7jlpnwZfcUJMR8T1vS6Jra/9HKljL7q9aAxhqp/mwSASQyLAYMWyZry7aHyEcbYSwABYK/vQzdyk7C69963Wn4/5b3Q2d6vb7ZMevz0mHZVbq6Wbj1eCp3tQRpkkwCY9JvTpd952TFxjrpsmSwq2RIkcvqGgDEBBIAxKioGTeDZKWdKzx5ZMR8TVgGQnd1CSpf0i4vItiVgmwTA7beeIpdfmhtzDhAMKO6vCBWSSAABkETYPCo2AZP79GEVADqy1asGSmbmATEHedHIV0WvMtpSbBIAl196vNx+a8eYriUYkC0zPxrjRABEw09WWPnTK0+Qm2/Mj+QKgBptsoIR1kOMQU0wmwTAgP5HyuOPFcZEOWPmJrnhpjeCwk2/EHBFAAHgCheVgyRwychcueuOU2I+IkypgBsa+rOrTpSfX39yTPvDGMgoSJ/aJADZfhxLAAAgAElEQVQKC9vI9Kk9Y+IkGFCQs42+3RJAALglRv3ACFz8k2OdsLqxSpi/oE0CGe3Y8ZV06jw7MIZh69gmAXB0+4NkSUnfmC6o2PC5FPV+OWxuwh5LCSAALHV8GIdtEgjod0+vl/vH/S2M5kurzGZStip2NDg1vFvPl6SysjqUY/DbKJsEQLNmTWT92v+JiZBgQH7PMPpLhAACIBF6tPWVQJ8+7eSpSWfE7HPq/22Q2+5409fn+tlZycLzJKdDy5hdXn3tcpkz9wM/HxvavmwSAOoEk4Og+QWzZefOr0LrMwyzhwACwB5fh36kXTofJjOmnx3TzrAH0zGJZTDpyXXy4IQ1ofeHHwbaJgDmzD5HOp6cGRNdn74LZN36z/zASx8QSIgAAiAhfDT2k4BJRrVlr30sI36yxM/H+tqXyTmGlW9uk6EXLPb1uWHtzDYBMPnp7tLr7LYx3XHRqFdlyRJ7roKGdW5ilwgCgFkQGgImGdXCnla3oOBQKZ5RFJOp7gPndZwltbXfhIZ9UIbYJgAeGHuajBjeISbOm29dJc+/8M+gkNMvBIwJIACMUVExGQTiZVSrqakVTasb1qIHwcrLBsXMCqe227IMbJsAMBlvmG+yhPX3CruCIYAACIYrvXokoNeo9DpVrBL2Q1QmSWF+ftNK+dPMjR4pRaeZyQvx8tGvyfwFm6MzqBiW/nh4jtw/9tSYYwn7Qda0cASDMCKAADDCRKVkETBJqxv2jGomIY2nTtsgt90Z3tsMfvnbNgHQq6itTH6qe0x8ixZvkVGXLvMLMf1AwDMBBIBndDQMgsD4cZ3lwguOidn1mBvekFnFm4J4vC99Dh1ytOhtgFilbPV2GTRkkS/PC3MntgmAjvmtZE5xr5guWVO+QwYM+muY3YZtlhBAAFji6KgM0yQfwK9/8448/OjfQzuknJwMKVlwbkz7vv76G+csgx4ITOdimwBom3WgLC/tH9OlW7d+KZ0L56Sz2xlbRAggACLiKFvMNFlCXbDwQ7nsytJQIzEJCDN02GJZuWpbqMeRqHG2CYCmTfeTinVD44q/3LyZVtwCSXT+0D5YAgiAYPnSu0sC2dktpHRJv5itKjdXS7ceL7nsObnVTc4yJCs3vN5MyMlpKfp1mt2uhbRu/X3RK5cZLfcX/VlGxv57wKmuqXVWJvTGhX6t7tz5b9lS9YVs2fKFKPuqqhrjl5dtAkBBrlo+wGEcq+gKgLKlQCCVBBAAqaTPs/dJQK/RNXwpNaxY0OVF2b59V2gJalZAzQ4Yq8ya/b6MuX6Fr2PQF49GVMw78RAp6HSoHJvTUrKyDvT1Gbp98Y+Kz6Viw05Zu/ZT0dgMZas/2ecLzUYBYBINMOwHWX2dMHQWWgIIgNC6xl7DZrxwtnQ57bCYAC4a+apoat2wlp49suTZKWfGNK+i4nMp6pNYZjgVSqd3bSM9exwuhV3bOF/6qSpVVV84Wxqa8vb1FVulomKn3HJTvoy+4oSYJqXTNUAdqEk0wFGXLZNFJVtS5SqeCwGHAAKAiRA6AiYvjbAfBDTNDOhlJUNf+n16t5N+fbPlrB5Z0qTJfqHzoRqkgqB586ZxV3PSTQCYXAO97c63ZOq0ilD6DaPsIYAAsMfXkRmpvtgmPX56THujEE+/dOkPJbtd85jjGHHRUllW+lFc3+jhMv3C1yuSyiesL/24A9lHhXQTALr1o1tAsQrRAL3MFNr4TQAB4DdR+kuYgMlVKt2Hzi8olurq2oSfF1QHjz9WKAP6Hxmze73OqKsZjRX92r/wgg7y4+EdpH2cCIlBjSPoftNNAPxoyNHycJw4EJoLQHMCUCCQSgIIgFTS59mNEjD5eh51WaksKvkwtBRNMgM2FhVOD/NdMvI4GfH/cuIuoYcWgKFh6SYAevbMkmcnxz7/oedX9BwLBQKpJIAASCV9nt0oAZOIgM889w/Rq3RhLXoaf8b0s2Oat2PHV9Kp8+zddfTF/9MrTpARw3PiJhQK67jd2pVuAsAkrXXYs1q69SH1o0kAARBNv6W91YMHtZeJj/wg5jj1kFnXbnNDy0Lv2L9TPjjufn23ni/Jjh275PJLj5dR/3tc2n/xN3RYugkAk7TWGltBt7AoEEglAQRAKunz7EYJ6Cn6VSsGxH15akx1ja0e1mKSGXD9+p3SvEXTuAcGvY5Rz0ts3PQv0WuH+q8GoNGAPvoS2r5jl9RU10rt19/s7r5pk/2cQDaZmc2kVasDnH9POvGQuOcZvNqXbgJAOcRLa6118jrOCvUZFq/+pF10CCAAouMr6yydU3yOdMzPjDnu3z29Xu4f97fQsjG5Eua38ZWba2T58o+du/hr3/lU1q//zDhyXyxbdDVDr/X5XdJRAJiktdYYECrKKBBIFQEEQKrI89y4BHRJ/PZbO8asV1lZIz17veTLCy6uQR4qmGQG9NDtHk30C18D8MxfuFlKSrY4X/l+F5MY9xo+WKMb6h54QadWxiakowCYPu0sKezaOiaDYcOXyPIVHxtzoiIE/CaAAPCbKP35RsAkq54+bNiIV2T58q2+PdfPjkzH4OWZuvUxa/YmKS5+31nKD7KYXM2sn+ZWczqc3/9IJ2BRPDGQjgJg4qNdZfDAo2K65IabVsqMmRuDdBt9QyAmAQQAEyTUBObN7e3EtY9Vgoip7ycUk8yAps+r+8rWKHLJPPtgkud+2Wsfy4ifLNlrKPHEQDoKAJNoluMfKpffPvGuqeupBwHfCSAAfEdKh34S+OmVJ8jNN+bH7FKz1ultAD3UFsZikhkwnt06tt//4T2ZPGV9SsZpcrfdRIjViYG+52XvPt+RjgLAJAbEM89VyF13vxXP9fwcAoERQAAEhpaO/SBgkh5Yn3Pvfavl91Pe8+ORvvdhkhmwsYem+sVfZ5fJtUy3L7Q6MaDnF/S/dCom4YAbCwKVThwYS7gJIADC7R+sExGTA1V68K1Xn5dDeRjQJDNgQ0frwb7fPb3OWSIOw8qGyRct8e3FieFwychcJwNis2bfi/n7W//MBL/oEEgFAQRAKqjzTFcETL4+tcOLR74qr4QwRbBpZsA6KPpleO/Y1YGc5ncFvl5lk1UMky0Ar88Pe7u6F7+bQE4a/KlT5xfDPjTsS2MCCIA0dm66DE2voJWtHBg3Qp7moR82/JVQDtskt4EG57nhxpWi4whbeWDsaTJieIeYZumqxTPP/kN+++S7TrAhG4pG/dPVETcv/vpccvP+LHqwkwKBVBBAAKSCOs90TcDkC1Q7DeuVQJPMgJoVULMDhrGY2F9nt77Qpk7bIH/680ZZu/bTMA4nYZs0QJW++HV1KpHUzD2L5oVqpSdhMHQQKQIIgEi5y15j9cDY0pK+cf/YhnUVwCSoUZgPhZmcw9jX7NSsdyoGdGsm6l+6uszf77xs+fHwHMmPE6HS5DdVeXQunBOKMx4m9lIn/QggANLPp2k7okcmdBGNrBevhHEVwDQzYOfCF0N5kHHBvHPl+NyMeOgb/bluCcz480Z5aV5lUuMXeDb4u4aa0OmsHllOHoR+fbPjClDT56lQffChcikr+8S0CfUg4DsBBIDvSOkwKAImaVb12WFcBTDNDBjWJeFnp5wpepvBj6I3NubM/UAWLNwcSjGg+/o9z8ySXkVtnTHrl79fRWP/33PfatGVEQoEUk0AAZBqD/B8VwSeeqKb9Ol9RNw2o69+3fnaDFMxSW509bXLnZdj2Ipuweg5gHhhfd3arSsD+jJcVvqxExd/S9UXbrtIuL6KM12h0dj9+rWfl3eIb1/6dcap6NEzHsWzN4VyhSdhiHQQSQIIgEi6zV6j9Y/zvDm94wLQP7h9+i4I1b7zA2NPlRHDc2LaPunJdfLghDVxx5eqChrb/7pr8+KGZ/ZqX1XVF/LW6k+krGy7VGz4XNat/0wqK6u9drdXO01znNMhw9nO0LlU0OlQOTanpe8vfF78vrmMjgIkgAAIEC5dB0PAdBVAT9TrV1dYiklmwJVvbpOhFywOi8mN2qFj+ekVJ0hOTsvAbdVQz7oyoEJA/9X78xocSf+rO1hYXVMrLb5LVawpi/WrvlWrAyQj4wDJyjpQNJnR0e0PCiSd8b4A6DbUM8/9w9nmqK39JnBGPAACXgggALxQo01KCehLZ+G8c+N+tenLoajPfF+/IBMZuMkZBn3Z5RcUR+KloS9Z3SMPckUgEd7JbqtxEF6c+748P/2foYzlkGwePC/8BBAA4fcRFu6DgOmNgDBdrdOARuVlg+J+herWhS59R6no1sDFFx0r3c9oEyWzfbFVzzH88f82OKl9/dyu8MU4OoFADAIIAKZHJAnokm7JwvPivkx1cGHKu26SGfDnN62UP0U0T7zuq194wTFy4QUd4sbCj+TE+85o/dp/ZUmV89Jf8FeW+aPsS5ttRwDY7P2Ij/26a0+SMdfkxR2F7hXrV/WWqpq4dYOuYBLRUAPn3Hbnm0GbEmj/enVuQP+j5EdDjvb95kCghsfpXBP46C2NOXPfT8mNhVSOnWenHwEEQPr51JoR6R70gnl9nMNd8YpeNbto5KvxqgX+cw0mM+nx02M+Z936ndKn7/zAbUnWA9Q/GkhHw+bmdAj+0KDf41r7zqfy4ndxC/QePwUC6UIAAZAunrR0HG5S7d4/bo2TYjeVRe/Tly7pF9MEXV4+MX9WqK4w+sVMxYCKoKKitnJqp0PjHuT067lu+tm+4yspLf1Ilr32kSxZUsWXvht41I0UAQRApNyFsfsiYHogUF+sQ4YtTnn41VXLB4jeR49Vhg5bLCtXbUtrh+s2QZfOraVL50OlsGsbJ7ZAs2bfS9mYdWlfBaJ+8XN1L2Vu4MFJJIAASCJsHhUMAX2RlCw4L+5LVZ+ugWb6D/prStPVmoTVvevuMuceuU1Ft3Q0QI8G59Grnnptsn37g5w7/EGXMIaPDnrM9A8BBABzIC0IaNz2yU91NxqL/rHX8wCpyk73s6tOFD0MGKvMmv2+jLl+hdF40r2SCgMVAbpqomJPA/7o/y9Wyc09WC6/NNcIjcZe6N13AVf4jGhRKZ0IIADSyZuWj8V0K0Ax6de1fmWnopicW9DDZkV9Xk6FeZF/ZosWTZ1w0bp6YFLG3PCGzCreZFKVOhBIKwIIgLRyp92D0T/8L83pbXQrQEmNf6hcfvvEu0mH1iqzmZStOj/ucwu6vCjbt++KW48K/yWgKwMaKrpnj8ONsMyavUnGXP+GUV0qQSDdCCAA0s2jlo+nY36mzJheZHyY7LIrX3PitSe7lC79oWS3ax7zsSMuWirLSj9KtmmRft4DY0+TEcM7GI2hcnO1FPWen7KtICMjqQSBAAkgAAKES9epIaAZ9zTznknRcwAqApKdn11T6+rd+FglbMmMTHimss5PrzxBbr4x38gE9fuAQYsiF3LZaHBUgoAhAQSAISiqRYuAm/MA+jIYdVlpUr+2L/7JsXLv3QUxoYYleFEUPK9BhiY+8gNjU9n3N0ZFxTQmgABIY+faPDTdC54+7SzjMLR6ElxvBiTr7n2XzofJjOlnx3TRjh1fSafOs212o9HY+/U9Uh5/rKtxUKHfPb1e7h/3N6O+qQSBdCaAAEhn71o+Nr06pi9Zjb5nUpK5HaAC5Z3ywXFfWt16vsT1tBjOc/vy11WVUZctI9CPyS8EddKeAAIg7V1s9wA1mEzxzCKjrIFKKpkioHhmr7grFFHODBj0zLtk5HFy1x2djB+jEf4GDSnh0J8xMSqmOwEEQLp7mPFJ926HO0GCTMPMqgi4/c63Ak/Jq2cA9CxArJLKeAVhnjqmmSDrxqAn/odesJi4/mF2KrYlnQACIOnIeWAqCPTp3U6e+M3pcZfc69s28Vdr5ZePvR2YuUOHHC16WDFWKVu9XQYNWRSYDVHruGnT/eT+safJhRccY2z61q1fyqChJWylGBOjoi0EEAC2eJpxiskLtyEmTRBzw00rA1k2zsnJkJIF58b0TDpnBnQ7JTUM8KTHz5Du3doYN9XDnZr7gTS+xsioaBEBBIBFzmaoIqNGHie/cLFvrMzWlO+Q0Ve/HsgX5OpVAyUz84CYrrEhM2C8ualnOZ564gzj8L7aX7JvdsQbAz+HQNgIIADC5hHsCZyAioA7bj3F1XaAXsm79voVvgcMmvpcT+l+RuwvWhszA9afBHrHf/wDnY3PcGjbnTv/7Zz2T9a1zsAnLQ+AQAAEEAABQKXL8BPo1zdbJj7S1dVLRUeld8g1Qp9fmQQ1K6BmB4xVbM0MqFclNaKjbt24KbrnP2zEKyz7u4FGXSsJIACsdDuDVgKalU8Tx5jeDqijptfJrr52uS8vGJPMgJs2/Ut6FM2zymkFBYc6ByRzOrR0NW497T9s+JJAtmtcGUJlCESAAAIgAk7CxOAIFBa2lscnFjq55t0UXQF4+NG3nbTCiawGkBlwT+r61a+rInrHv0mT/dy4xInrf/HIV7nq54oalW0mgACw2fuM3SGgkQKnPtvDOI1wfWy6GqC3BNau/dQzzSUlfeM+24bMgBoeefy4zq6/+hW8RvjTg5rV1bWe/UBDCNhGAAFgm8cZ7z4JtGjR1LliZppHvn4nelXv+en/dM4GbN+xyzXhiY92lcEDj4rZLp0zA+rqi371u7nbXx+WnssY/9Aawvu6nnk0sJ0AAsD2GcD4dxPQIDM3XHeyaFpZL0UPn0168l3547QNrrYFbM0MqMv9eiPjp1ecIHrH323RrZfb7nxLZszc6LYp9SEAARFBADANINCAgEYNfOzRHxjnD2gIsGLD5zJ+QrnMX7jZiK0eeCueURSzbjplBlShNXhge+f2Q/v2Bxkxalhp46Z/OUv+iWy9eHowjSCQRgQQAGnkTIbiHwE9F/D4Y4Vxk/XEeqKeD5j42Nq4QkBfiGvX/E/c2wg9i+aJvviiWvx48evYNTrjbXe+6dz1p0AAAt4JIAC8s6NlmhPQJWr9StUtAbcn0uujWb9+p/xxWoU8/8I/G90amPHC2dLltMNiEtWrh/ryi1rR5f0B/Y+SKy7N9fzFr2PWyH533l3Gkn/UJgD2hpYAAiC0rsGwsBAo7NpGHpnQ2bktkEjRMwIz/rzROSNQWVm9R1fpmBnw6PYHyYjhOc7hPi97/PUBLV+x1blt0ZBbIv6gLQRsJ4AAsH0GMH4jAroacPutHeXHw3MSWg2oe5heW9PDa/MXfuisClx4QQcZP+60mLasfHObk9I2zEVf9L2KjnBe+oVdWydsqi7zP/hQuUydVpFwX3QAAQjsSQABwIyAgAsCeXmHOBHq8k48xEWrxqvqC27Bws1O8Jp4IYFVKOQXzHZ1w8AXI+N0ouLorB5ZMqD/kU50xUS/9usep9sd94/7G4F9kuFEnmElAQSAlW5n0IkQ0MNswy7oINddk+c6gmAiz9W2YckM2DbrQOnW7XA5t3c750vfr5e+jlFT9951T5ksK/0oUVy0hwAEYhBAADA9IOCRgAaw0Tvsus/tNp+Ax0c6cQYenFDutbnndrqfn5+fKRqtT89EHJ+b4bmvxhrqVceHHv27TH9hA0F9fKdLhxDYmwACgFkBgQQJ6OFAXQ1wm7XOy2M16uCLcz+QioqdUrm5RrZs+UKqqmqcZXKvOQl0RSMzs5m0zWourVs3k+x2LaRt2wMlK6u5E6JYE/L4+YXfcNy6DfL7P7wnk6es52qfl0lBGwh4JIAA8AiOZhBoSEDPB1x3zUnOPniyVgTq26C3DPQr+uNtX8rOnV851+Z27fqPIwyaN28q+qLXf3XPXpMQ6Utd/83MPCAlzuTFnxLsPBQCuwkgAJgMEPCZgH41a3jfZG4N+DyEQLtTofLH/9vAF3+glOkcAvEJIADiM6IGBDwR0K/rC4cdIyP+X45kZzf31Ec6NSpbvd0JiFQ8exN7/OnkWMYSWQIIgMi6DsOjREC3BTSGQKq2B1LFSpf59Trf8y9skDXlO1JlBs+FAAT2QQABwLSAQBIJ6L57v/OynTvzpxe28SWoUBLNN3qUnjtYsnSL/GnmJilZ/CFf+0bUqASB5BNAACSfOU+EgENAtwiKito6gqCwsLW0aN40smS27/hKSko+dCIbLl/xMaf5I+tJDLeJAALAJm8z1tAS0JP5396xby3dux3uRBpMxU0CU0D6lb9y1TZZ9tpHUlr6kWjmw9rab0ybUw8CEAgBAQRACJyACRBoSKBFi6aOCCjodKgUFLSSnA4ZcmxOy5RsGWjsAU1DrHv4ZWWfOP+W/307L3ymLQQiTgABEHEHYr49BFQUtG9/kBzboaXk5GRIdrvmToZCDcurQXsSWTHQl/zHW7+UqqovnJe9Zt2r2PC5rFv/mROa12uQIXu8w0ghED0CCIDo+QyLIbBPAioQNKKfni1o3qKpHJyxv1Mvo+W3/2qprqkVfdlXV9c6/1sDBmnwoO3bd0EVAhCwjAACwDKHM1wIQAACEICAEkAAMA8gAAEIQAACFhJAAFjodIYMAQhAAAIQQAAwByAAAQhAAAIWEkAAWOh0hgwBCEAAAhBAADAHIAABCEAAAhYSQABY6HSGDAEIQAACEEAAMAcgAAEIQAACFhJAAFjodIYMAQhAAAIQQAAwByAAAQhAAAIWEkAAWOh0hgwBCEAAAhBAADAHIAABCBgSyMjYf3cCpux2LUT/7507/y07P/+3bNnyhVRurnYSKVEgEAUCCIAoeAkbIRAggYKCQ+WsHll7PEFfavVLkyb7iSYb0qIJhP44bYPvGQKbNWsil4w8Tlq3/r7xaDU18aziTcb1TSvqi/1UJxXzoZLjZF9sKXUv/Hh91NTUyrr1O6Vs9SeyrPRjWb7iYyf5EgUCYSOAAAibR7AHAkkmMH3aWVLYtbWrp466bJksKtniqk28yvqyLZ5RFK/aXkIlv6DYVZvGKutLv9952TJ4UHvp0vkwUdHjR9FUyosWb5EZMzfKkqVVUlv7jR/d0gcEEiaAAEgYIR1AINoE5s3tLXknHuJqEJePfk3mL9jsqk28yoWFbWT61J7xqvkuAHTF4WdXnSiDB7Z3lvSDLLo9MPkP7wWyghKk3fSdngQQAOnpV0YFAWMCtgoA3XL46ZUnyOgrTpBmzb5nzMuPipWba2T8hDXy4twP/OiOPiDgiQACwBM2GkEgfQjYKAB0u+GRCV2c/f1UlpderpS77i6TrVu/TKUZPNtSAggASx3PsCFQR8A2AaAHDW+/9RTf9vgTnUn68h9zwxuyrPSjRLuiPQRcEUAAuMJFZQikHwGbBIC++C+/NDd0Tvz662/knvtWyzPP/iN0tmFQ+hJAAKSvbxkZBIwI2CIAfnFHJxk18jgjJqmqNPFXa+WXj72dqsfzXMsIIAAsczjDhUBDAnNmnyMdT850BSZqtwB+fv3Jzkn/KJT7x62R3z29LgqmYmPECSAAIu5AzIdAogS8xAGIkgD40ZCj5eEJXRLFlLT2uh0w8tJlTswACgSCJIAACJIufUMgAgTSWQBoBL95c/ok/Zpfom7XSIx9+i6QLVU1iXZFewg0SgABwOSAgOUEoiwANMpebt6fG/Wgl/MNptNh167/SNOm+wV2m0CjB466dJmpOdSDgGsCCADXyGgAgfQiEGUBoJ5on/OnfTrkx8Nz5P6xp/rirMrKGlm0+ENZvmKrrF37qWyp+mJ3LgTNkaB5AvLyDpHuZ7SRPr3b+RZR8GfXLidYkC8epJN9EUAAMC8gYDmBdBQAGuWvdEk/V4mF9jUN9IX/69+84yT0MY3hr88ePPAoufzS450kQomUjZv+Jb36vGz87ESeRVv7CCAA7PN5ZEasf0j1D+jR7Q+S1od9X/RwlGai0z+Kmm1Nl38TKbp8q19u2dktdme6+2znv6VqS42T1tX0D34iNoShbToKAL3up9f+vBadW7fd+ZaTwMdr0fk7+soT5JqrTkxom0CDBAWR8dDruGiXPgQQAOnjy9CMRJdCTzJILqMR0F5pcNJZk7Gc3/8oKSpqK93POLzRw1uaclVTreof6PkLzZPS6MteM76d2+cIyT+5Vcz+NdWsnsT+08yNrkO16hhM09rW1v7HGUd1jbuUsb2K2srR7c2/MBeVfOiIp4YlHQVAInv/Oi8vGvWqs9TvR+nZI0ueeqKb54OIK1dtk6HDFvthCn1AYA8CCAAmhO8E3ikfLM2bf5s7Pl7pXDjHebnqV75+LZ3f/0jjtnV9r33nU3n40b/HTE+rL+Nbbsx3Ur26TfOqX4OzZr/vPMMkZrs+a9XyAfGGvsfPvVyrK1l4nqtY9ipmLhr5atoLgIJOh0rxTHdpheugqK8HDS3x7eVf16+KgClPd3c993a3L5q3T/HmapJRGQINCCAAmBK+E9hU8SPjPvsOWOi89HW/1O2LueFD5sz9QG64aeVeWwMD+h8pD4w9LeGDWfpy0P71ObGKrjLo/rOb4kUAlC79oWS3a278GN3PHjb8lbQXACr0VEx6KbrsP3VahZemcdskEoyI4EBx8VLBAwEEgAdoNIlNwI0A0KV809UCE+66xD3ioqWiedd1D1b3gUcM72DS1LhOvHCtCABjlHtULCxsI9On9nTduOEtgAXzzpXjczNc96MrSX37L3TdzrSBnjlZtOA8Z7XLbWlMvLnth/oQqE8AAcB88J2AGwHg+8NFnGX6m29bJWOuOUk65rsLcWtqz89vWumcDdhXQQCYUtyznh8CoFVmMylbdb4nAy6/8jVX50m8PGTokKOdNMRui64+5RfMTvjgq9vnUj+9CSAA0tu/KRldqgVAMgatf5B1+6Ki4vO9HpcsAbC0pK+0d/E16ecWQBBL0rpP/uyUM127r/4KgNc+dMWoW8+XXD/bbQONGbB8WX9P21EDBi2SNeXb3T6S+hBolAACgMnhOwEbBIBCK1v9iQwaUpIyAeD2pLufAkAHreFq/Sz6cvRyDqS+ANCzJLff2tG1WZOefFcenFDuup2XBnojoE/vI1w3jTBwrmsAABYOSURBVLXq5LozGkBARBAATAPfCdgiABTc1deukDlz39+DYbJWAFItAHyfOB47rC8Axo/rLBdecIzrnvR2RLKS71wy8ji5y0OMAg1IpDdRKBDwiwACwC+S9LObgE0CoGz1dhk0ZBECIIXzv74A0C0E3QZwWwq6vCjbt+9y28xT/S6dD5MZ08923Vavoo65foXrdjSAQGMEEADMDd8J2CQAFF5Rn/lSUbFzN0dWAHyfUjE7rC8A5sw+Rzqe7O7gp25l5BcUJ83oVq2aSdlK9wcVl732sYz4yZKk2cmD0p8AAiD9fZz0EdomABoeiEMAJHfK1RcAbg9GqqWVm2ukW4+/JNXoDeuHuj7voJEpBwz6a1Lt5GHpTQABkN7+TcnoEhUAmnlt5ZvbZMeOXU6MgMKurT3dnW5s8JpT4O21n0p5+Q6p/fo/Tt+FXdt4DtX60suVMvqq11kBSMls2zMboNvgSGqy5pXo03d+Uq0vLxvk+iZA0HEKkgqAh4WCAAIgFG5ILyO8CgBditX7+y/Nq9wLiKZYvffuAmmbdWBCsDR/wO13vrlXWFUN36sHyHqd3dZ1/xUbPpei3i8jAFyT86dB/RUALwJAU/sWdpvrjzGGvSAADEFRLVACCIBA8drZuRcBoPfqNYKfJj5prOiXup589xo5cFHJFrl8dGmjWf40Utvkp7q7PkSm0QxPzJ+FAEjRdK8vANzmR1CTG/ovGcNgCyAZlHlGPAIIgHiE+LlrAl4EwOQp78k9962O+6zrrj1JxlyTF7dewwq6ulDU5+W4yXxUZOhLxO199LyOs6S6+ttsfpwBcO2ehBrUFwDFM3tJQadWrvurS0rluqGHBrqKtby0v+uWHAJ0jYwGcQggAJgivhPwIgA03Wmsr/86I73+8Xz+hX/KzbeuMhrr5Ke7u94K0ChyGk0OAWCE2NdK9QWA1yA7uvq0rPSjhO3SdNa333qKIzQbu7PvNVoh1wATdg8dNCCAAGBK+E7A7fKmHsrLzZvZ6NJ8QwO9LPNqFr8ZjcTub9j/j4fnyP1jT3XFpX6YVltWAKprauXr2m/24KQJmJo1+54rdolWri8AfnFnJxn1v8e57nL8Q+Xy2yfedd2ufoNeRW2drJNZ351TGXXZsn2mqPaaFTBeEqqEjKexlQQQAFa6PdhBuz3g1PAQXTzrJj7aVQYPPCpetT1+7iaOekHBoVI8w10++fpfkMkSAG6z3jV2inz6tLOcmxZuyi9/tVYmPva2myZx6xZ0OlSKZ7rjrp3WFwAXXtBBxo87Le6zGlZIJNuefvVr1klN9FO/VFV9Ib37zt8rZLLbCI51fY6++vV9HpB1PVgaQOA7AggApoLvBNwKALd7m7fclC+jr3CX772w+19ky5Yao7F6CdRy+ejXZP6CzU7/XrYp3KxQ1A3C7Yl3PwVAEC8jL8KpoQA4PvdgWTCvj5Gf61fSVageRfN2b+OYdtDwq79hO111Ut/Wlby8Q2TenN6m3e9Rr/42k6cOaASBBgQQAEwJ3wm4FQALFn4ol11ZamyHl4QvuXl/Nk6lqrcBKtYNNbZHK4654Q2ZVbzJaZORcYCUlw101T5qAsCLvfGA+CEA1Herlp8vmZkHxHvcXj93s8SuaYc16VDDr/59PbT+VsDjjxXKgP5HurYtWdkKXRtGg0gTQABE2n3hND5oAXDJyFy5645TXA2+/jKxSUO3BxnrvxC9CAA9oKgHFd2U9WuHuNpv93MFIKwCQPl5fcnqTZGeRfNk+47YOQE0JsUjE7oYB/Kp2wpQgVM8o5crn9XNh4YrCW7mCXUh0BgBBABzw3cCtgsATWu7ds1gV1z1xLhmezMtel1xSUlf0+pOPVsEwID+R8njj3V1xaaucsOojvvqxMsevr7AVQC4PWtR9/xkZiv0BI5GkSSAAIik28JttNtbADP+vFFuuPG/+6TxRhfGFYDb7nxLpk6r2G26WwZut0F06Vm/Qt0UWwSA3kRYtXyA8Rd6Q4YNczs0/LmuADz1xBlu0CdUV68U6v6/BsuiQMBPAggAP2nSl0PA7fJ5OgiAe+9bLb+f8t7uGaAvIA0vbFp0+blbz7/sdWK8sfZevkJtEQDKTE/ljxrp/jqgttUDgRqU6pln/9Go+7zcRDGdCw3rTXryXXlwQrnX5rSDQKMEEABMDt8JIABEvESkm/yH9+SesfGjIQ4e1F4mPvID136zSQB4jehYH+rUaRscIbCvL289BKjxKLwcNnTjOH22fv3rKgAFAn4TQAD4TZT+WAEQEa9fiPFOouvysx5y8xJsxyYBoL+GukVicko/1q+spgrWeAcvzv1gLyHgVYi5+RNhGiLbTZ/UhUAdAQQAc8F3AqwAiFz8k2Od7IVeir6o9Q//6yu2SlVVjXOtUIPkaPAjL1fI6mywTQBoPIYlJf08iaWGftux4yuZv3CzLFlaJWvKd+yOF+AlbLTpnNCv/r4DFvL1bwqMeq4JIABcI6NBPAJBC4ALhx0j4x/oHM+MPX4e9DXAhmcAOuZnypzic1zZGHRl2wSA8vQSM8LED3pOQM9taBRAt4mjTPrXOg0Plpq2ox4ETAkgAExJUc+YQNAC4EdDjpaHXZ6AT7YASCQgjTFolxVtFADqhxnTizxlCHSJ19fqy0o/lhEXLfG1TzqDQEMCCADmhO8EEADfItXEMCOGd/Cdr9cObRQAykoPBOpqjH6tR6FUbq6WAQMXxQ1IFIWxYGO4CSAAwu2fSFoXtADwsr+e7BUAdVwicd+DcHxjAmDO7HOk48mZrh4Z5kiA+xqIpuCd8nT3wJbrXcGLUVn3/QcNLXGdk8Cv59OPXQQQAHb5OymjDVoAhDEQUMMzAHWgn51ypujLJwxFD68NGPTXvUzxElMgagJAB+0leFIy/VZTUytDhi2WtWs/TeZjeZbFBBAAFjs/qKEjAP5LNienpcyb08eXk+iJ+quxlLe2CADlp1f39ACpl2uUifKP1V7v+2u4X/URBQLJIoAASBZpi56DANjT2V62LIKYLgiAb6nqisxjj3YNPIiPGx8uWrxFRl26zE0T6kIgYQIIgIQR0kFDAgiAvefE7beeIpdfmpvSyYIA+C9+TcyjgYK8Jufx25G6AqB3/isqPve7a/qDQKMEEABMDt8JIAD2jfTn158sP7vqRN95m3aIANiblJ4LuOXGfFd5G0x5u62nhzT1jEZt7Tdum1IfAp4IIAA8YaNRLAIIgMbpFHZtIw+MPVX0bIDXUl1TK3PmfuBca+t3XrZxNwiAfaPS7IF6XfOS/82V7OzmxjyDqBgvE2EQz6RPewkgAOz1fWAjX792iKtDVm6zAV54QQcZP+40V/a7vQboNp3vXXeXyTPPNZ49rr6x+sLp0/sIufiiY6XLaYcZj0NP8euL//kXNjhR6HQ1QVcVTEtjAmDqcz2l+xltTLtx6o254Q2ZVbzJVZt4lTXBTtmq8+NV2+PnGpGvQ+4MV20aq6xBg7qdcbic3/9I0ZwLqYgbwFaAL66kE0MCCABDUFQzJ6B/PE/KO8S4gcZYd3P1SdPsDh7YXlq0aGr0jI0b/yWzZrt7WelBMQ3nW10TPwf717X/kQULN8uWqi+M7KlfSV96hYWt5fjcgyUr60DnpdO0yfecxDPbd+xy+tR94fLy7Xv17/Y6ZGMCQGPmd+92uLHttV9/44y3urrWuI1pReWek5NhWt25L6+2+F1UDOSf3Mrxjc6DnA4ZTkChWLcHdGVm8+Ya2bKlRioraxyTVOi5SQutbRrzk99jpD8IIACYAxCIKAG3AkAT2ehVM4p3AvoyV9GW2aqZ04kKtZ07v5Kqqi/2KYhU2Ok1Szf5Atat/0z69F3g3UhaQsCQAALAEBTVIBA2Am4FgG4fXH3t8rANI+3tMb0BotsZv5/ynjz86N/3Sj2c9pAYYEoIIABSgp2HQiBxAtdde5KMuSbPuKPJf3hP7hm72rg+Ff0hoGc+dBUgp0PjBz/1BoBm/ysr+8Sfh9ILBAwIIAAMIFEFAl4ItGrVTJo33/c5ha+//o9UV397vuDb/+1+P33io11l8MCjjE1zc1DRuFMqGhEoKDhUZk4/e6+tAN1C+PVv3pFJT77L9T8jklTykwACwE+a9AWB7wjogbElJX2NeTSWSyBWB6VLfujq2pru/+s5AEpqCDTcCihb/YloTgWC/6TGHzxVBAHALIBAAAR02fed8sHGh7/0Wl+3nn9xrveZFL1p8dQTZ5hU/W6V4RvJLyj2tNJg/BAqxiRQtxWQ3a65s8+vWzIE/WHSpJIAAiCV9Hl2WhPQHPR6hcy06Nf5ZVe+FvcAmIaxnT7tLNEXiWlZuWqbDB222LQ69QIioLcIVAjo9UUKBFJNAAGQag/w/LQloCFmR195gqvxxToMpnfT+513pNx+a0cnZoCbwv6/G1rUhYAdBBAAdviZUaaAgAa0KVlwrqcnb9z0L1m1apts3fal88WY3a6FdOl8mKcMdm63FzwZTCMIQCByBBAAkXMZBkeJgC7VpzrjnO4360lzCgQgAIH6BBAAzAcIBEhAX/4qAlJVKjdXS1Hv+XHPFaTKPp4LAQikjgACIHXsebIlBDTvvKadTXbRO+Z69U9jy1MgAAEINCSAAGBOQCBgApq0aNaMXnJ8rnmSGz9Muu3ON2XqtA1+dEUfEIBAGhJAAKShUxlS+Ag4V/em9hT9N+iiMeXvG/c3mTzlvaAfRf8QgECECSAAIuw8TI8WAc0i9+vHCqV7tzaBGb5jx1dy7fUriPgXGGE6hkD6EEAApI8vGUlECIwYniPXXZPnOk98rOHpV/+fZm6U8RPKZfuOXREhgZkQgEAqCSAAUkmfZ1tLQO/2D+h/pFw47Bg5tdOhxiGDGwLTPPQvzv1Apk6rEI0dQIEABCBgSgABYEqKehAIiEBGxv5S2LWNEzY4J6elaCKh1od9XzSbYJMm+zlP1WA+GhRo69YvZd36z2TtO585qWP1f1MgAAEIeCGAAPBCjTYQgAAEIACBiBNAAETcgZgPAQhAAAIQ8EIAAeCFGm0gAAEIQAACESeAAIi4AzEfAhCAAAQg4IUAAsALNdpAAAIQgAAEIk4AARBxB2I+BCAAAQhAwAsBBIAXarSBAAQgAAEIRJwAAiDiDsR8CEAAAhCAgBcCCAAv1GgDAQhAAAIQiDgBBEDEHYj5EIAABCAAAS8EEABeqNEGAhCAAAQgEHECCICIOxDzIQABCEAAAl4IIAC8UKMNBCAAAQhAIOIEEAARdyDmQwACEIAABLwQQAB4oUYbCEAAAhCAQMQJIAAi7kDMhwAEIAABCHghgADwQo02EIAABCAAgYgTQABE3IGYDwEIQAACEPBCAAHghRptIAABCEAAAhEngACIuAMxHwIQgAAEIOCFAALACzXaQAACEIAABCJOAAEQcQdiPgQgAAEIQMALAQSAF2q0gQAEIAABCEScAAIg4g7EfAhAAAIQgIAXAggAL9RoAwEIQAACEIg4AQRAxB2I+RCAAAQgAAEvBBAAXqjRBgIQgAAEIBBxAgiAiDsQ8yEAAQhAAAJeCCAAvFCjDQQgAAEIQCDiBBAAEXcg5kMAAhCAAAS8EEAAeKFGGwhAAAIQgEDECSAAIu5AzIcABCAAAQh4IYAA8EKNNhCAAAQgAIGIE0AARNyBmA8BCEAAAhDwQgAB4IUabSAAAQhAAAIRJ4AAiLgDMR8CEIAABCDghQACwAs12kAAAhCAAAQiTgABEHEHYj4EIAABCEDACwEEgBdqtIEABCAAAQhEnAACIOIOxHwIQAACEICAFwIIAC/UaAMBCEAAAhCIOAEEQMQdiPkQgAAEIAABLwQQAF6o0QYCEIAABCAQcQIIgIg7EPMhAAEIQAACXgggALxQow0EIAABCEAg4gQQABF3IOZDAAIQgAAEvBBAAHihRhsIQAACEIBAxAkgACLuQMyHAAQgAAEIeCGAAPBCjTYQgAAEIACBiBNAAETcgZgPAQhAAAIQ8EIAAeCFGm0gAAEIQAACESeAAIi4AzEfAhCAAAQg4IUAAsALNdpAAAIQgAAEIk4AARBxB2I+BCAAAQhAwAsBBIAXarSBAAQgAAEIRJwAAiDiDsR8CEAAAhCAgBcCCAAv1GgDAQhAAAIQiDgBBEDEHYj5EIAABCAAAS8EEABeqNEGAhCAAAQgEHECCICIOxDzIQABCEAAAl4IIAC8UKMNBCAAAQhAIOIEEAARdyDmQwACEIAABLwQQAB4oUYbCEAAAhCAQMQJIAAi7kDMhwAEIAABCHghgADwQo02EIAABCAAgYgTQABE3IGYDwEIQAACEPBCAAHghRptIAABCEAAAhEngACIuAMxHwIQgAAEIOCFAALACzXaQAACEIAABCJOAAEQcQdiPgQgAAEIQMALAQSAF2q0gQAEIAABCEScAAIg4g7EfAhAAAIQgIAXAggAL9RoAwEIQAACEIg4AQRAxB2I+RCAAAQgAAEvBBAAXqjRBgIQgAAEIBBxAgiAiDsQ8yEAAQhAAAJeCCAAvFCjDQQgAAEIQCDiBBAAEXcg5kMAAhCAAAS8EEAAeKFGGwhAAAIQgEDECSAAIu5AzIcABCAAAQh4IYAA8EKNNhCAAAQgAIGIE0AARNyBmA8BCEAAAhDwQgAB4IUabSAAAQhAAAIRJ4AAiLgDMR8CEIAABCDghQACwAs12kAAAhCAAAQiTgABEHEHYj4EIAABCEDACwEEgBdqtIEABCAAAQhEnAACIOIOxHwIQAACEICAFwIIAC/UaAMBCEAAAhCIOAEEQMQdiPkQgAAEIAABLwQQAF6o0QYCEIAABCAQcQIIgIg7EPMhAAEIQAACXgggALxQow0EIAABCEAg4gQQABF3IOZDAAIQgAAEvBBAAHihRhsIQAACEIBAxAkgACLuQMyHAAQgAAEIeCGAAPBCjTYQgAAEIACBiBNAAETcgZgPAQhAAAIQ8EIAAeCFGm0gAAEIQAACESeAAIi4AzEfAhCAAAQg4IUAAsALNdpAAAIQgAAEIk4AARBxB2I+BCAAAQhAwAsBBIAXarSBAAQgAAEIRJwAAiDiDsR8CEAAAhCAgBcCCAAv1GgDAQhAAAIQiDgBBEDEHYj5EIAABCAAAS8EEABeqNEGAhCAAAQgEHECCICIOxDzIQABCEAAAl4IIAC8UKMNBCAAAQhAIOIEEAARdyDmQwACEIAABLwQQAB4oUYbCEAAAhCAQMQJIAAi7kDMhwAEIAABCHghgADwQo02EIAABCAAgYgTQABE3IGYDwEIQAACEPBCAAHghRptIAABCEAAAhEngACIuAMxHwIQgAAEIOCFAALACzXaQAACEIAABCJOAAEQcQdiPgQgAAEIQMALAQSAF2q0gQAEIAABCEScAAIg4g7EfAhAAAIQgIAXAggAL9RoAwEIQAACEIg4AQRAxB2I+RCAAAQgAAEvBBAAXqjRBgIQgAAEIBBxAgiAiDsQ8yEAAQhAAAJeCCAAvFCjDQQgAAEIQCDiBBAAEXcg5kMAAhCAAAS8EEAAeKFGGwhAAAIQgEDECfx/YaRz4WSBOqUAAAAASUVORK5CYII=" alt="myHQ" height="48" style="display:block;border-radius:6px;">
+      </a>
+    </div>
+
+    <!-- Delivery info -->
+    <div class="header-delivery">
+      Delivered to <em>Arjun</em>,<br>
+      subscriber to myHQ Office Pulse.
+    </div>
+
+    <!-- Date + View in Browser -->
+    <div class="header-right">
+      <div class="header-date">April 08, 2026</div>
+      <a href="#" class="view-browser">VIEW IN BROWSER</a>
+    </div>
+
+  </div><!-- /header -->
+
+  <!-- ═══ BYLINE BAR ═══ -->
+  <div class="byline-bar">
+    <div>
+      <div class="byline-left">
+        <span>OFFICE PULSE</span> · Bangalore
+      </div>
+      <div class="byline-sub">Fortnightly intelligence for the office market</div>
+    </div>
+    <div class="byline-region-pill">Bangalore</div>
+  </div>
+
+  <!-- ═══ BODY ═══ -->
+  <div class="body-content">
+
+    <!-- Greeting -->
+    <p class="greeting">Good morning, Arjun,</p>
+
+    <!-- Top of Mind prose intro -->
+    
+    <div class="tom-prose">
+      <p><strong>Bangalore's office market posts its strongest Q1 net absorption since 2019 at 4.1 msf, driven by GCC expansions and a return of mid-size flex demand.</strong></p>
+      <p>Tech and BFSI occupiers led the charge this fortnight, with three lease closures above 1 lakh sq ft. The Outer Ring Road micro-market continues to attract large-format leases, while HSR Layout is quietly emerging as the go-to corridor for sub-30,000 sq ft boutique office deals — a trend myHQ is seeing first-hand across its managed workspace portfolio. Developers are responding: new supply this quarter is up 18% QoQ, yet vacancy has compressed to 14.2%, the lowest since mid-2022.</p>
+    </div>
+    
+
+    <!-- ── SPOTLIGHT (Lead Story) ── -->
+    
+    <div class="lead-story">
+
+      <div class="story-image img-spotlight">
+        <span class="story-image-label">THE SPOTLIGHT · Bangalore</span>
+      </div>
+
+      <div class="section-label" style="margin-top:14px;">
+        THE SPOTLIGHT
+        <span class="read-time">· 4 min read</span>
+      </div>
+
+      <h1 class="lead-headline">HSR Layout's Boutique Office Boom: Why Sub-30K Sq Ft Deals Are Driving Bangalore's Next Leasing Cycle</h1>
+
+      <div class="lead-body">
+        <p><em>A new breed of mid-market tenant is bypassing Whitefield for the flexibility and talent density of South Bangalore.</em></p>
+        <p>For the past 18 months, most of Bangalore's leasing headlines have been written in Whitefield and Hebbal — large GCC mandates, 2-5 lakh sq ft blocks, multi-year leases. But a quieter story is playing out in HSR Layout, Koramangala, and Sarjapur Road: a surge in sub-30,000 sq ft deals from Series B-D startups, Indian IT services firms right-sizing after work-from-home sprawl, and new-age BFSI companies that need campus-lite offices near talent pools. Data from JLL and Anarock shows HSR Layout recorded 47 transactions below 20,000 sq ft in Q1 2026 — up 64% year-on-year. Average deal size in the micro-market: 11,400 sq ft. That's a profile that suits managed workspace operators and boutique Grade-A buildings far better than it does the large IT parks. myHQ's own occupancy data across HSR and Koramangala centres corroborates the trend: seat utilisation in dedicated cabin clusters hit 91% in March, the highest since January 2023. Landlords who held out for large tenants in 2023-24 are now reconsidering floor-plate flexibility.</p>
+      </div>
+
+      
+      <div class="takeaway-box">
+        <div class="takeaway-label">Key Takeaway</div>
+        <div class="takeaway-text">HSR Layout is no longer just an overflow market — it's the primary address for Bangalore's mid-market office demand. Brokers and landlords ignoring sub-30K sq ft mandates here are leaving money on the table.</div>
+      </div>
+      
+
+      
+      <a href="https://www.jll.co.in/en/trends-and-insights/research/india-office-market-overview" class="read-more">Read the full story →</a>
+      
+
+    </div>
+    
+
+    <!-- ── EXECUTIVE PULSE ── -->
+    
+    <hr class="divider-thick">
+    <div class="section-heading">This Fortnight at a Glance</div>
+    
+    <div class="two-col" style="margin-bottom:0;">
+      
+      <div class="col-story">
+        <div class="story-image img-deal">
+          <span class="story-image-label">QUICK READ</span>
+        </div>
+        <div class="section-label" style="margin-top:10px;">
+          QUICK HIT <span class="read-time">· 1 min</span>
+        </div>
+        <div class="story-headline">Bengaluru overtakes Hyderabad in Q1 GCC leasing count for first time since 2021</div>
+        <div class="story-summary">54 GCC transactions closed in Bangalore vs 41 in Hyderabad — talent depth and metro connectivity cited as key differentiators.</div>
+      </div>
+      
+      <div class="col-story">
+        <div class="story-image img-developer">
+          <span class="story-image-label">QUICK READ</span>
+        </div>
+        <div class="section-label" style="margin-top:10px;">
+          QUICK HIT <span class="read-time">· 1 min</span>
+        </div>
+        <div class="story-headline">Outer Ring Road vacancy dips below 10% as Prestige and Embassy hold back new completions</div>
+        <div class="story-summary">With ORR vacancy at 9.8%, rents are nudging ₹115-120 psf/month — a 6% uplift from December 2025 levels.</div>
+      </div>
+      
+    </div>
+    
+    <hr class="divider">
+    <div class="story-list">
+    
+    <div class="story-list-item">
+      <div class="section-label">QUICK HIT</div>
+      <div class="story-list-headline">Karnataka govt fast-tracks IT corridor extension to Attibele — 3 msf of new supply expected by 2028</div>
+      <div class="story-summary">The move is aimed at decongesting Whitefield and Electronic City; site allocation notifications expected by June.</div>
+    </div>
+    
+    </div>
+    
+    
+    
+
+    <!-- ── DEAL DESK ── -->
+    
+    <hr class="divider-thick">
+    <div class="section-heading">Deal Desk</div>
+
+    <!-- First two deals as image cards -->
+    
+    <div class="two-col">
+      
+      <div class="col-story">
+        <div class="story-image img-deal">
+          <span class="story-image-label">PRE-COMMITMENT</span>
+        </div>
+        <div class="section-label" style="margin-top:10px;">
+          DEAL DESK
+          <span class="read-time">· Outer Ring Road</span>
+        </div>
+        <div class="story-headline">Walmart Global Tech inks 2.2 lakh sq ft pre-commitment at Embassy TechVillage Phase 4</div>
+        <div class="story-summary">Walmart Global Tech has signed a pre-commitment for 2.2 lakh sq ft at Embassy TechVillage's upcoming Phase 4 tower on ORR, with fit-out slated to begin Q3 2026. The deal consolidates two existing Walmart offices in Bellandur into a single campus. CBRE acted for the occupier; Embassy handled in-house.</div>
+        
+        <div class="story-insight">Pre-commitments at this scale signal that large tech GCCs are locking supply 18-24 months ahead — a landlord-friendly dynamic that will keep ORR rents elevated through 2027.</div>
+        
+        
+        <a href="https://economictimes.indiatimes.com/industry/services/property-/-cstruction/walmart-global-tech-leases-office-space-bangalore/articleshow/sample.cms" class="read-more" style="font-size:12px;">Details →</a>
+        
+      </div>
+      
+      <div class="col-story">
+        <div class="story-image img-deal">
+          <span class="story-image-label">EXPANSION</span>
+        </div>
+        <div class="section-label" style="margin-top:10px;">
+          DEAL DESK
+          <span class="read-time">· Whitefield</span>
+        </div>
+        <div class="story-headline">PhonePe expands footprint with 85,000 sq ft new lease at Salarpuria Sattva Knowledge City</div>
+        <div class="story-summary">PhonePe has taken an additional 85,000 sq ft floor at Salarpuria Sattva Knowledge City to house its growing payments infrastructure and risk engineering teams. The fintech now occupies approximately 2.1 lakh sq ft across the complex. Lease tenure is 5 years with a 15% escalation clause at year 3.</div>
+        
+        <div class="story-insight">Fintech's office footprint in Bangalore continues to punch above its sector weight — PhonePe's expansion is the third BFSI-adjacent deal in Whitefield this fortnight.</div>
+        
+        
+        <a href="https://www.livemint.com/companies/phonepe-office-space-bangalore-whitefield/sample" class="read-more" style="font-size:12px;">Details →</a>
+        
+      </div>
+      
+    </div>
+    
+
+    <!-- Remaining deals as stacked list -->
+    
+    <hr class="divider">
+    <div class="story-list">
+    
+    <div class="story-list-item">
+      <div class="story-meta">
+        <span class="story-meta-tag highlight">New Lease</span>
+        <span class="story-meta-tag">Koramangala</span>
+        <span class="story-meta-tag">55,000 sq ft</span>
+        <span class="story-meta-tag">Meesho</span>
+      </div>
+      <div class="story-list-headline">Meesho signs 55,000 sq ft lease in Koramangala's RMZ Ecospace annex</div>
+      <div class="story-summary">Social commerce platform Meesho has leased a full floor at RMZ Ecospace's recently completed annex block in Koramangala. The company is consolidating product and design teams from a co-working setup into a branded office. Deal structured as a 3-year lease with two 1-year renewal options.</div>
+      <div class="story-insight">Meesho's shift from flex to owned-feel office reflects a broader D2C/e-commerce trend: hypergrowth-phase companies graduating into mid-size leases as they mature.</div>
+      
+    </div>
+    
+    <div class="story-list-item">
+      <div class="story-meta">
+        <span class="story-meta-tag highlight">Seat Deal</span>
+        <span class="story-meta-tag">HSR Layout</span>
+        <span class="story-meta-tag">12,000 sq ft</span>
+        <span class="story-meta-tag">myHQ</span>
+      </div>
+      <div class="story-list-headline">myHQ HSR Layout centre reaches 100% occupancy; waitlist opens for first time</div>
+      <div class="story-summary">myHQ's HSR Layout managed workspace — a 12,000 sq ft centre near Agara Lake — hit full occupancy for the first time in March 2026, with a waitlist of 34 teams across 8 companies now active. The centre houses 18 dedicated offices ranging from 4-seat cabins to 40-seat suites.</div>
+      <div class="story-insight">Full occupancy with an active waitlist is a leading indicator: a second myHQ HSR centre or an adjacent micro-market expansion (Sarjapur, BTM) looks increasingly justified.</div>
+      
+    </div>
+    
+    </div>
+    
+
+    <!-- /deal_desk -->
+
+    <!-- ── DEVELOPER WATCH ── -->
+    
+    <hr class="divider-thick">
+    <div class="section-heading">Developer Watch</div>
+
+    <div class="story-list">
+    
+    <div class="story-list-item">
+      <div class="story-meta">
+        <span class="story-meta-tag highlight">Announced</span>
+        <span class="story-meta-tag">Hebbal</span>
+        <span class="story-meta-tag">18 lakh sq ft</span>
+      </div>
+      <div class="story-list-headline">Prestige Group launches 'Prestige Technocrat' — 1.8 msf Grade-A campus in Hebbal</div>
+      <div class="story-summary">Prestige Group has officially announced Prestige Technocrat, a 1.8 msf mixed-use office campus in Hebbal adjacent to its existing Prestige Tech Park North. The project comprises three towers with floor plates of 40,000-60,000 sq ft, targeting GCC and BFSI tenants. Completion expected H2 2028. Pre-leasing conversations are reportedly underway with two US-headquartered GCCs.</div>
+      <div class="story-insight">Prestige doubling down on Hebbal — already home to Manyata Tech Park — will intensify competition for north Bangalore GCC mandates and may create a true multi-landlord corridor to rival ORR.</div>
+      <a href="https://www.businessline.com/companies/prestige-group-hebbal-office-campus/sample" class="read-more" style="font-size:12px;">Read more →</a>
+    </div>
+    
+    <div class="story-list-item">
+      <div class="story-meta">
+        <span class="story-meta-tag highlight">Under Construction</span>
+        <span class="story-meta-tag">CV Raman Nagar</span>
+        <span class="story-meta-tag">9 lakh sq ft</span>
+      </div>
+      <div class="story-list-headline">Bagmane Developers breaks ground on World Trade Centre Bengaluru Tower 3 in CV Raman Nagar</div>
+      <div class="story-summary">Bagmane has commenced construction on the third tower of its World Trade Centre Bengaluru complex, adding 9 lakh sq ft of Grade-A space to a campus that already houses Accenture, Capgemini, and SAP. Tower 3 is designed to LEED Platinum standards with 50,000 sq ft floor plates. Delivery expected Q4 2027.</div>
+      <div class="story-insight">Tower 3 will test whether CV Raman Nagar can absorb another large block outside of ORR — Bagmane's track record of deep tenant relationships reduces lease-up risk significantly.</div>
+      
+    </div>
+    
+    </div>
+
+    <!-- /developer_watch -->
+
+    <!-- ── TALENT MOVES ── -->
+    
+    <hr class="divider-thick">
+    <div class="section-heading">Talent Moves</div>
+
+    <div class="talent-list">
+    
+    <div class="talent-row">
+      <div class="talent-initial">R</div>
+      <div class="talent-info">
+        <div class="talent-name">Rahul Arora</div>
+        <div class="talent-transition">
+          Managing Director — Occupier Services, CBRE South Asia
+          <span class="arrow"> → </span>
+          Chief Business Officer, Smartworks Co-working
+        </div>
+        <div class="talent-brief">Rahul Arora, who built CBRE's occupier advisory practice across South Asia over 11 years, has joined Smartworks as CBO to lead enterprise sales, market expansion, and product-market fit for managed campuses. He takes charge with immediate effect and will be based in Bangalore.</div>
+        
+        <div class="talent-matters">Senior talent moving from transactional brokerage to flex operators signals growing conviction in the managed workspace model at the enterprise level.</div>
+        
+      </div>
+    </div>
+    
+    <div class="talent-row">
+      <div class="talent-initial">D</div>
+      <div class="talent-info">
+        <div class="talent-name">Deepa Nair</div>
+        <div class="talent-transition">
+          Head of Real Estate, India — Flipkart
+          <span class="arrow"> → </span>
+          VP Real Estate & Workplace, Zepto
+        </div>
+        <div class="talent-brief">Deepa Nair, who oversaw Flipkart's 3.5 msf office and fulfilment-centre portfolio for 5 years, has joined Zepto as VP Real Estate & Workplace to lead the quick-commerce company's rapid dark store and HQ expansion. She joins a team that has added 12 lakh sq ft of space in 14 months.</div>
+        
+        <div class="talent-matters">Zepto's aggressive real estate hiring signals that Q-commerce is entering a phase where operational excellence in space — not just speed — will differentiate winners.</div>
+        
+      </div>
+    </div>
+    
+    </div>
+
+    <!-- /talent_moves -->
+
+    <!-- ── MARKET PULSE ── -->
+    
+    <hr class="divider-thick">
+    <div class="section-heading">Market Pulse</div>
+
+    
+    <div class="section-label" style="margin-bottom:14px;">
+      Bangalore Q1 2026: Absorption outpaces supply for third consecutive quarter
+    </div>
+    
+
+    
+    <div class="stat-strip">
+      
+      <div class="stat-cell">
+        <div class="stat-cell-label">Grade A Vacancy</div>
+        <div class="stat-cell-value">14.2%</div>
+        <div class="stat-cell-trend down">
+          ↓ Falling
+        </div>
+        <div class="stat-cell-context">vs 16.1% in Q4 2025</div>
+      </div>
+      
+      <div class="stat-cell">
+        <div class="stat-cell-label">Avg Rent (psf/mo)</div>
+        <div class="stat-cell-value">₹108</div>
+        <div class="stat-cell-trend up">
+          ↑ Rising
+        </div>
+        <div class="stat-cell-context">+5.8% YoY citywide</div>
+      </div>
+      
+      <div class="stat-cell">
+        <div class="stat-cell-label">Net Absorption</div>
+        <div class="stat-cell-value">4.1 msf</div>
+        <div class="stat-cell-trend up">
+          ↑ Rising
+        </div>
+        <div class="stat-cell-context">Best Q1 since 2019</div>
+      </div>
+      
+      <div class="stat-cell">
+        <div class="stat-cell-label">New Supply</div>
+        <div class="stat-cell-value">3.3 msf</div>
+        <div class="stat-cell-trend up">
+          ↑ Rising
+        </div>
+        <div class="stat-cell-context">+18% QoQ completions</div>
+      </div>
+      
+    </div>
+    
+
+    
+    <div class="market-narrative">Bangalore's office market is in a supply-demand sweet spot: absorption continues to outpace new completions for the third consecutive quarter, compressing Grade-A vacancy from 16.1% to 14.2% in just 90 days. The ₹108 psf/month average rent masks wide micro-market divergence — ORR and Whitefield command ₹115-125, while HSR Layout and Sarjapur Road remain accessible at ₹80-95, attracting a different but growing tenant profile. With 3.3 msf of new supply completing in Q1 being absorbed in near real-time, landlords across Bangalore have regained pricing power they lost in 2022-23. Watch for a re-rating of secondary corridors as ORR rents push toward ₹130 psf/month through the year.</div>
+    
+
+    <!-- /market_pulse -->
+
+  </div><!-- /body-content -->
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer">
+    <div class="footer-logo">my<span>HQ</span> Office Pulse</div>
+    <div class="footer-tagline">Bangalore Edition · Fortnightly Intelligence</div>
+    <div class="footer-links">
+      <a href="#">Unsubscribe</a>
+      &nbsp;·&nbsp;
+      <a href="#">Update Preferences</a>
+      &nbsp;·&nbsp;
+      <a href="https://myhq.in">Visit myHQ</a>
+      &nbsp;·&nbsp;
+      <a href="#">View in Browser</a>
+    </div>
+    <div class="footer-disclaimer">
+      © 2026 myHQ. All rights reserved. This newsletter is for informational purposes only.<br>
+      Market data sourced from public reports and news publications. Verify before making business decisions.<br>
+      myHQ, [Address], India.
+    </div>
+  </div>
+
+</div><!-- /email-wrap -->
+
+</body>
+</html>

@@ -34,30 +34,6 @@
     .header-logo {
       flex: 0 0 auto;
     }
-    .logo-box {
-      background: #2B2FE6;
-      border-radius: 6px;
-      padding: 8px 14px 8px 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-    /* Approximate myHQ icon mark using CSS */
-    .logo-icon {
-      width: 26px;
-      height: 26px;
-      position: relative;
-      flex-shrink: 0;
-    }
-    .logo-icon svg { display: block; }
-    .logo-text {
-      font-size: 18px;
-      font-weight: 900;
-      color: #FFFFFF;
-      letter-spacing: -0.3px;
-      font-family: Arial Black, Arial, sans-serif;
-    }
     .header-delivery {
       flex: 1;
       text-align: center;
@@ -163,6 +139,8 @@
       background: rgba(0,0,0,0.35);
       padding: 3px 10px;
       border-radius: 2px;
+      position: relative;
+      z-index: 1;
     }
 
     /* gradient backgrounds per category */
@@ -310,8 +288,8 @@
       padding: 16px 0;
       border-bottom: 1px solid #F0EFEB;
     }
-    .story-list-item:first-child { padding-top: 0; }
-    .story-list-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .story-list > .story-list-item:first-child { padding-top: 0; }
+    .story-list > .story-list-item:last-child { border-bottom: none; padding-bottom: 0; }
 
     .story-list-headline {
       font-family: Georgia, 'Times New Roman', serif;
@@ -363,8 +341,8 @@
       border-bottom: 1px solid #F0EFEB;
       align-items: flex-start;
     }
-    .talent-row:first-child { padding-top: 0; }
-    .talent-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .talent-list > .talent-row:first-child { padding-top: 0; }
+    .talent-list > .talent-row:last-child { border-bottom: none; padding-bottom: 0; }
     .talent-initial {
       width: 38px;
       height: 38px;
@@ -467,7 +445,6 @@
       border-bottom: 2px solid #1A1A1A;
       margin-bottom: 18px;
       text-transform: uppercase;
-      font-style: italic;
     }
 
     /* ── Footer ── */
@@ -516,15 +493,8 @@
 
     <!-- Logo -->
     <div class="header-logo">
-      <a href="https://myhq.in" class="logo-box" style="text-decoration:none;">
-        <!-- myHQ icon mark (SVG approximation — replace with assets/myhq_logo.png if preferred) -->
-        <div class="logo-icon">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="13" cy="13" r="11" stroke="white" stroke-width="2"/>
-            <path d="M9 8.5 L9 18 M9 8.5 Q13 11 13 13 Q13 11 17 8.5 L17 18 Q13 16 13 18 Q13 16 9 18" fill="white"/>
-          </svg>
-        </div>
-        <span class="logo-text">myHQ</span>
+      <a href="https://myhq.in" style="text-decoration:none;display:inline-block;">
+        <img src="{{ logo_data_uri }}" alt="myHQ" height="48" style="display:block;border-radius:6px;">
       </a>
     </div>
 
@@ -550,7 +520,7 @@
       </div>
       <div class="byline-sub">Fortnightly intelligence for the office market</div>
     </div>
-    <div class="byline-region-pill">{{ period }}</div>
+    <div class="byline-region-pill">{{ region.display_name }}</div>
   </div>
 
   <!-- ═══ BODY ═══ -->
@@ -601,11 +571,11 @@
     </div>
     {% endif %}
 
-    <hr class="divider-thick">
-
     <!-- ── EXECUTIVE PULSE ── -->
     {% if newsletter.executive_pulse %}
+    <hr class="divider-thick">
     <div class="section-heading">This Fortnight at a Glance</div>
+    {% if newsletter.executive_pulse|length >= 2 %}
     <div class="two-col" style="margin-bottom:0;">
       {% for item in newsletter.executive_pulse[:2] %}
       <div class="col-story">
@@ -622,6 +592,7 @@
     </div>
     {% if newsletter.executive_pulse|length > 2 %}
     <hr class="divider">
+    <div class="story-list">
     {% for item in newsletter.executive_pulse[2:] %}
     <div class="story-list-item">
       <div class="section-label">QUICK HIT</div>
@@ -629,13 +600,24 @@
       <div class="story-summary">{{ item.brief }}</div>
     </div>
     {% endfor %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="story-list">
+    {% for item in newsletter.executive_pulse %}
+    <div class="story-list-item">
+      <div class="section-label">QUICK HIT</div>
+      <div class="story-list-headline">{{ item.headline }}</div>
+      <div class="story-summary">{{ item.brief }}</div>
+    </div>
+    {% endfor %}
+    </div>
     {% endif %}
     {% endif %}
-
-    <hr class="divider-thick">
 
     <!-- ── DEAL DESK ── -->
     {% if newsletter.deal_desk %}
+    <hr class="divider-thick">
     <div class="section-heading">Deal Desk</div>
 
     <!-- First two deals as image cards -->
@@ -644,7 +626,7 @@
       {% for deal in newsletter.deal_desk[:2] %}
       <div class="col-story">
         <div class="story-image img-deal">
-          <span class="story-image-label">{{ deal.deal_type | upper }}</span>
+          <span class="story-image-label">{{ (deal.deal_type or 'Deal') | upper }}</span>
         </div>
         <div class="section-label" style="margin-top:10px;">
           DEAL DESK
@@ -665,7 +647,7 @@
     {% set deal = newsletter.deal_desk[0] %}
     <div class="story-list-item" style="padding-top:0;">
       <div class="story-meta">
-        <span class="story-meta-tag highlight">{{ deal.deal_type }}</span>
+        <span class="story-meta-tag highlight">{{ deal.deal_type or 'Deal' }}</span>
         {% if deal.micro_market %}<span class="story-meta-tag">{{ deal.micro_market }}</span>{% endif %}
         {% if deal.area_sqft %}<span class="story-meta-tag">{{ deal.area_sqft }}</span>{% endif %}
       </div>
@@ -679,10 +661,11 @@
     <!-- Remaining deals as stacked list -->
     {% if newsletter.deal_desk|length > 2 %}
     <hr class="divider">
+    <div class="story-list">
     {% for deal in newsletter.deal_desk[2:] %}
     <div class="story-list-item">
       <div class="story-meta">
-        <span class="story-meta-tag highlight">{{ deal.deal_type }}</span>
+        <span class="story-meta-tag highlight">{{ deal.deal_type or 'Deal' }}</span>
         {% if deal.micro_market %}<span class="story-meta-tag">{{ deal.micro_market }}</span>{% endif %}
         {% if deal.area_sqft %}<span class="story-meta-tag">{{ deal.area_sqft }}</span>{% endif %}
         {% if deal.company %}<span class="story-meta-tag">{{ deal.company }}</span>{% endif %}
@@ -693,16 +676,17 @@
       {% if deal.source_url %}<a href="{{ deal.source_url }}" class="read-more" style="font-size:12px;">Details →</a>{% endif %}
     </div>
     {% endfor %}
+    </div>
     {% endif %}
 
     {% endif %}<!-- /deal_desk -->
 
-    <hr class="divider-thick">
-
     <!-- ── DEVELOPER WATCH ── -->
     {% if newsletter.developer_watch %}
+    <hr class="divider-thick">
     <div class="section-heading">Developer Watch</div>
 
+    <div class="story-list">
     {% for proj in newsletter.developer_watch %}
     <div class="story-list-item">
       <div class="story-meta">
@@ -716,15 +700,16 @@
       {% if proj.source_url %}<a href="{{ proj.source_url }}" class="read-more" style="font-size:12px;">Read more →</a>{% endif %}
     </div>
     {% endfor %}
+    </div>
 
     {% endif %}<!-- /developer_watch -->
 
-    <hr class="divider-thick">
-
     <!-- ── TALENT MOVES ── -->
     {% if newsletter.talent_moves %}
+    <hr class="divider-thick">
     <div class="section-heading">Talent Moves</div>
 
+    <div class="talent-list">
     {% for move in newsletter.talent_moves %}
     <div class="talent-row">
       <div class="talent-initial">{{ move.person[0] | upper if move.person else '?' }}</div>
@@ -742,13 +727,13 @@
       </div>
     </div>
     {% endfor %}
+    </div>
 
     {% endif %}<!-- /talent_moves -->
 
-    <hr class="divider-thick">
-
     <!-- ── MARKET PULSE ── -->
     {% if newsletter.market_pulse %}
+    <hr class="divider-thick">
     <div class="section-heading">Market Pulse</div>
 
     {% if newsletter.market_pulse.headline %}
